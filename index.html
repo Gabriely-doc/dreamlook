@@ -1,804 +1,917 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamLook</title>
-  <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f9f0f3 0%, #f3e9eb 100%);
-      color: #5a3a47;
-      line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DreamLook - Seu look dos sonhos</title>
+<style>
+  /* Reset e básicos */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8e9f0, #f0e5d8);
+    color: #5a3e4e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header, footer {
+    background-color: #d9b6c9;
+    color: #422c3a;
+    text-align: center;
+    padding: 1.2rem 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    user-select: none;
+  }
+  #slogan {
+    text-align: center;
+    font-style: italic;
+    margin: 0.6rem 0 2rem;
+    color: #6e4f5c;
+  }
+  #banner {
+    background-color: #bfa4b9;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.8rem 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    overflow: hidden;
+  }
+  #banner span {
+    animation: marquee 15s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  #produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  .produto {
+    background: #f3e7e9;
+    border-radius: 10px;
+    padding: 0.8rem;
+    box-shadow: 0 3px 8px rgba(102,46,77,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .produto img {
+    width: 100%;
+    border-radius: 8px;
+    height: 140px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  .produto h3 {
+    font-size: 1rem;
+    margin: 0 0 0.3rem;
+    color: #4c2c43;
+    text-align: center;
+  }
+  .preco {
+    font-weight: 700;
+    color: #7b455c;
+    margin-bottom: 0.3rem;
+  }
+  .estoque {
+    font-size: 0.8rem;
+    color: #9c7b8a;
+    margin-bottom: 0.5rem;
+  }
+  .produto button {
+    background-color: #a97fae;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .produto button:disabled {
+    background-color: #d9c7d2;
+    cursor: not-allowed;
+  }
+  .produto button:hover:not(:disabled) {
+    background-color: #7b4d7c;
+  }
+
+  /* Quiz */
+  #quiz {
+    padding: 1rem;
+    background: #f8f0f5;
+    margin: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(102,46,77,0.1);
+  }
+  .quiz-question p {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-options label {
+    display: block;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    color: #5a3e4e;
+    user-select: none;
+  }
+  .quiz-options input[type="radio"] {
+    margin-right: 0.5rem;
+  }
+  #btn-submit-quiz {
+    background-color: #a97fae;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.6rem 1.2rem;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 0.8rem;
+  }
+  #btn-submit-quiz:hover {
+    background-color: #7b4d7c;
+  }
+
+  /* Máquina de looks */
+  #look-machine {
+    background: #f3e7e9;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem;
+    box-shadow: 0 2px 10px rgba(102,46,77,0.15);
+  }
+  #look-machine h2 {
+    text-align: center;
+    color: #633f54;
+    margin-bottom: 1rem;
+  }
+  #category-select {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  #category-select button {
+    background-color: #d4b4ca;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    color: #5a3e4e;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+  }
+  #category-select button.active,
+  #category-select button[aria-selected="true"] {
+    background-color: #7b4d7c;
+    color: white;
+  }
+  #items-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 160px;
+    margin-bottom: 1rem;
+    outline: none;
+  }
+  .item-card {
+    width: 140px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    padding: 0.3rem;
+    outline-offset: 2px;
+  }
+  .item-card img {
+    width: 100%;
+    height: 110px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .item-card p {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0;
+    color: #633f54;
+  }
+  .item-card:focus {
+    outline: 3px solid #7b4d7c;
+  }
+  #assembled-look {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .assembled-piece {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    width: 150px;
+    text-align: center;
+    position: relative;
+    padding: 0.5rem;
+  }
+  .assembled-piece h4 {
+    margin: 0 0 0.5rem;
+    color: #6e4f5c;
+  }
+  .assembled-piece img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .assembled-piece button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #b871a8;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+  }
+  .assembled-piece button:hover {
+    background: #7b4d7c;
+  }
+  #clear-look {
+    display: block;
+    margin: 0 auto;
+    background-color: #a97fae;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  #clear-look:hover {
+    background-color: #7b4d7c;
+  }
+
+  /* Container da máquina e foto do corpo lado a lado */
+  #look-machine-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem;
+  }
+  #look-machine, #user-photo-container {
+    flex: 1 1 320px;
+    max-width: 400px;
+  }
+  #user-photo-container {
+    background: #f8f0f5;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(102,46,77,0.15);
+    text-align: center;
+  }
+  #user-photo-container h3 {
+    color: #633f54;
+    margin-bottom: 1rem;
+  }
+  #user-photo {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+    border: 2px solid #a97fae;
+    object-fit: contain;
+  }
+  #upload-label {
+    margin-top: 1rem;
+    display: inline-block;
+    background-color: #a97fae;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  #upload-label:hover {
+    background-color: #7b4d7c;
+  }
+  #upload-photo {
+    display: none;
+  }
+
+  /* Contato */
+  #contato {
+    background: #f8f0f5;
+    padding: 1rem 1.5rem;
+    margin: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(102,46,77,0.1);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #contato h2 {
+    color: #633f54;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  #form-contato input,
+  #form-contato textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 7px;
+    border: 1.5px solid #bda4b7;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #5a3e4e;
+  }
+  #form-contato input:focus,
+  #form-contato textarea:focus {
+    border-color: #7b4d7c;
+    outline: none;
+  }
+  #form-contato button {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #a97fae;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  #form-contato button:hover {
+    background-color: #7b4d7c;
+  }
+
+  /* Carrinho */
+  #cart {
+    display: none;
+    position: fixed;
+    top: 10vh;
+    right: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 1rem;
+    flex-direction: column;
+    z-index: 1100;
+  }
+  #cart-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    align-self: flex-end;
+    cursor: pointer;
+    color: #7b4d7c;
+  }
+  #cart-list {
+    flex: 1;
+    margin-bottom: 1rem;
+    outline: none;
+  }
+  .cart-item {
+    margin-bottom: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-item button {
+    background: #d491bc;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0 6px;
+  }
+  #cart-total {
+    font-weight: 700;
+    color: #633f54;
+    margin-bottom: 1rem;
+  }
+  #checkout-btn {
+    background-color: #a97fae;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.7rem;
+    width: 100%;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  #checkout-btn:hover {
+    background-color: #7b4d7c;
+  }
+  #open-cart-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    background-color: #a97fae;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 28px;
+    color: white;
+    box-shadow: 0 6px 14px #7b4d7caa;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  #open-cart-btn:hover {
+    background-color: #7b4d7c;
+  }
+
+  /* WhatsApp fixo */
+  a.whatsapp-fixo {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background-color: #25d366;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 14px #22bc5aaa;
+    cursor: pointer;
+    z-index: 1002;
+    border-radius: 50%;
+    text-decoration: none;
+  }
+  a.whatsapp-fixo svg {
+    fill: white;
+    width: 28px;
+    height: 28px;
+  }
+  a.whatsapp-fixo:hover {
+    background-color: #1da851;
+  }
+
+  /* Responsividade */
+  @media (max-width: 900px) {
+    #look-machine-wrapper {
       flex-direction: column;
       align-items: center;
-      padding: 1rem;
     }
-    header {
-      width: 100%;
-      max-width: 960px;
-      margin-bottom: 0.3rem;
-      text-align: center;
-      font-size: 2.6rem;
-      font-weight: 800;
-      color: #8b5570;
-      letter-spacing: 3px;
-      font-family: 'Georgia', serif;
-    }
-    #slogan {
-      max-width: 960px;
-      color: #a1768d;
-      font-style: italic;
-      margin-bottom: 1.8rem;
-      font-size: 1.2rem;
-      text-align: center;
-      font-family: 'Palatino Linotype', 'Book Antiqua', serif;
-    }
-    #banner {
-      background: #cba5b1;
-      color: #462c34;
-      font-weight: 700;
-      font-size: 1.15rem;
-      padding: 1rem 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      height: 3.4rem;
-      line-height: 1.6;
-      max-width: 960px;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(139, 85, 112, 0.5);
-    }
-    #banner span {
-      position: absolute;
-      width: 100%;
-      top: 3.4rem;
-      animation: slideBanner 12s linear infinite;
-      white-space: nowrap;
-      left: 0;
-    }
-    #banner span:nth-child(2) {
-      animation-delay: 4s;
-    }
-    #banner span:nth-child(3) {
-      animation-delay: 8s;
-    }
-    @keyframes slideBanner {
-      0% { top: 3.4rem; opacity: 0; }
-      10% { top: 0; opacity: 1; }
-      33% { top: 0; opacity: 1; }
-      43% { top: -3.4rem; opacity: 0; }
-      100% { top: -3.4rem; opacity: 0; }
-    }
-    @media (max-width: 480px) {
-      #banner {
-        font-size: 1rem;
-        height: 3rem;
-      }
-      #banner span {
-        top: 3rem;
-      }
-      @keyframes slideBanner {
-        0% { top: 3rem; opacity: 0; }
-        10% { top: 0; opacity: 1; }
-        33% { top: 0; opacity: 1; }
-        43% { top: -3rem; opacity: 0; }
-        100% { top: -3rem; opacity: 0; }
-      }
+    #look-machine, #user-photo-container {
+      max-width: 90vw;
+      flex: none;
     }
     #produtos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.1rem;
-      max-width: 960px;
-      width: 100%;
-      margin-bottom: 2.2rem;
+      grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
     }
-    .produto {
-      background: #f6e7ec;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(139, 85, 112, 0.3);
-      padding: 1rem;
-      width: 230px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.25s ease;
-    }
-    .produto:hover {
-      transform: scale(1.06);
-      box-shadow: 0 8px 18px rgba(139, 85, 112, 0.5);
-    }
-    .produto img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      object-fit: cover;
-      height: 170px;
-      filter: drop-shadow(1px 1px 1px #a87a91);
-    }
-    .produto h3 {
-      color: #7b455c;
-      margin-bottom: 0.5rem;
-      font-size: 1.3rem;
-      font-weight: 700;
-      font-family: 'Georgia', serif;
-    }
-    .preco {
-      font-weight: 700;
-      color: #7d4056;
-      margin-bottom: 0.6rem;
-      font-size: 1.1rem;
-    }
-    .estoque {
-      font-size: 0.9rem;
-      color: #9c6f82;
-      margin-bottom: 1rem;
-    }
-    .produto button {
-      background-color: #8b5570;
-      color: white;
-      border: none;
-      padding: 0.6rem 0;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.05rem;
-      transition: background-color 0.3s ease;
-    }
-    .produto button:disabled {
-      background-color: #d7c1ca;
-      cursor: not-allowed;
-    }
-    .produto button:hover:not(:disabled) {
-      background-color: #6e4257;
-    }
-    #quiz {
-      max-width: 960px;
-      width: 100%;
-      background: #f8e9ed;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(139, 85, 112, 0.3);
-      padding: 1.3rem 1.8rem;
-      margin-bottom: 2.2rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #quiz h2 {
-      color: #7b455c;
-      margin-bottom: 1.3rem;
-      text-align: center;
-      font-family: 'Georgia', serif;
-    }
-    .quiz-question {
-      margin-bottom: 1.2rem;
-    }
-    .quiz-question p {
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      color: #9c6f82;
-    }
-    .quiz-options label {
-      display: block;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      color: #7d4056;
-    }
-    #btn-submit-quiz {
-      display: block;
-      margin: 1rem auto 0 auto;
-      padding: 0.75rem 2.3rem;
-      background-color: #8b5570;
-      color: white;
-      border: none;
-      border-radius: 9px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #btn-submit-quiz:hover {
-      background-color: #6e4257;
-    }
-    #quiz-result {
-      margin-top: 1rem;
-      font-weight: 700;
-      text-align: center;
-      color: #7d4056;
-      min-height: 3.5rem;
-    }
-    #look-generator {
-      max-width: 960px;
-      width: 100%;
-      background:#f8e9ed;
-      border-radius:12px;
-      box-shadow:0 4px 10px rgba(139,85,112,0.3);
-      padding:1.5rem 2rem;
-      margin-bottom:2.5rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #look-generator h2 {
-      color:#7b455c;
-      font-family:'Georgia', serif;
-      margin-bottom:1rem;
-      text-align:center;
-    }
-    #btn-gerar-look {
-      background-color:#8b5570;
-      color:#fff;
-      border:none;
-      padding:0.8rem 1.8rem;
-      border-radius:10px;
-      font-weight:700;
-      font-size:1.1rem;
-      cursor:pointer;
-      display:block;
-      margin: 0 auto 1.3rem auto;
-      transition: background-color 0.3s ease;
-    }
-    #btn-gerar-look:hover {
-      background-color:#6e4257;
-    }
-    #look-display {
-      display:flex;
-      flex-wrap: wrap;
-      justify-content:center;
-      gap:1.3rem;
-      text-align:center;
-    }
-    #contato {
-      max-width: 960px;
-      width: 100%;
-      background: #f8e9ed;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(139, 85, 112, 0.3);
-      padding: 1.8rem 2.2rem;
-      margin-bottom: 2.2rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #contato h2 {
-      color: #7b455c;
-      margin-bottom: 1.1rem;
-      text-align: center;
-      font-family: 'Georgia', serif;
-    }
-    #form-contato {
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-    #form-contato input,
-    #form-contato textarea {
-      padding: 0.7rem 0.9rem;
-      font-size: 1rem;
-      border: 2px solid #a1768d;
-      border-radius: 10px;
-      resize: vertical;
-      color: #5a3a47;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #form-contato input:focus,
-    #form-contato textarea:focus {
-      outline: none;
-      border-color: #7b455c;
-      background: #fce9f0;
-    }
-    #form-contato button {
-      background-color: #8b5570;
-      color: white;
-      border: none;
-      padding: 0.9rem 0;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #form-contato button:hover {
-      background-color: #6e4257;
-    }
-    footer {
-      max-width: 960px;
-      width: 100%;
-      text-align: center;
-      padding: 1.2rem 0;
-      font-size: 1rem;
-      color: #a1768d;
-      border-top: 1px solid #d6b2be;
-      font-family: 'Georgia', serif;
-    }
-    #cart {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #f8e9ed;
-      border-radius: 14px;
-      box-shadow: 0 8px 15px rgba(139, 85, 112, 0.7);
-      padding: 1.2rem 2rem;
-      width: 340px;
-      max-height: 80vh;
-      overflow-y: auto;
-      display: none;
-      flex-direction: column;
-      z-index: 1000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #cart h2 {
-      text-align: center;
-      color: #7b455c;
-      margin-bottom: 1rem;
-      font-family: 'Georgia', serif;
-    }
-    #cart-list {
-      flex-grow: 1;
-      overflow-y: auto;
-      margin-bottom: 1.2rem;
-      color: #7d4056;
-      font-weight: 600;
-    }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.7rem;
-      color: #7d4056;
-      font-weight: 600;
-    }
-    .cart-item button {
-      background: transparent;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: #8b5570;
-      font-weight: 700;
-      line-height: 1;
-    }
-    #cart-total {
-      font-weight: 700;
-      color: #8b5570;
-      margin-bottom: 1.2rem;
-      text-align: center;
-      font-size: 1.1rem;
-    }
-    #checkout-btn {
-      background-color: #8b5570;
-      color: white;
-      border: none;
-      padding: 0.75rem 0;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 100%;
-    }
-    #checkout-btn:hover {
-      background-color: #6e4257;
-    }
-    #cart-close {
-      position: absolute;
-      top: 12px;
-      right: 18px;
-      font-size: 1.7rem;
-      cursor: pointer;
-      color: #8b5570;
-      font-weight: 700;
-      background: transparent;
-      border: none;
-    }
-    #open-cart-btn {
-      position: fixed;
-      bottom: 22px;
-      right: 22px;
-      background-color: #8b5570;
-      border: none;
-      color: white;
-      border-radius: 50%;
-      width: 52px;
-      height: 52px;
-      font-size: 1.9rem;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(139, 85, 112, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    #open-cart-btn:hover {
-      background-color: #6e4257;
-    }
-    a.whatsapp-fixo {
-      position: fixed;
-      bottom: 90px;
-      right: 22px;
-      background-color: #25d366;
-      border-radius: 50%;
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1100;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-    a.whatsapp-fixo:hover {
-      background-color: #1ebe57;
-    }
-    a.whatsapp-fixo svg {
-      fill: white;
-      width: 28px;
-      height: 28px;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
 <header>DreamLook</header>
 <div id="slogan">O look dos seus sonhos ao seu alcance</div>
 
-<div id="banner" aria-live="polite" aria-atomic="true">
-  <span>Moda, sapatos e bolsas sofisticados com preços que encantam.</span>
-  <span>Descubra seus looks perfeitos aqui!</span>
-  <span>Entrega rápida e atendimento VIP via WhatsApp.</span>
+<div id="banner" aria-live="polite" role="region">
+  <span>Moda exclusiva com entrega rápida!</span>
+  <span>Looks perfeitos para todas ocasiões!</span>
+  <span>Compre com segurança e qualidade garantida!</span>
 </div>
 
-<section id="produtos" aria-label="Produtos em destaque">
-  <!-- Produtos serão gerados pelo script -->
-</section>
+<!-- Produtos -->
+<section aria-label="Produtos em destaque" id="produtos" tabindex="0"></section>
 
-<section id="quiz" aria-label="Quiz para ajudar a encontrar produtos">
-  <!-- Quiz gerado pelo JS -->
-</section>
+<!-- Quiz -->
+<section aria-label="Quiz de sugestões de moda" id="quiz" tabindex="0"></section>
 
-<section id="look-generator" aria-label="Gerador de looks completos">
-  <h2>Monte seu look dos sonhos</h2>
-  <button id="btn-gerar-look">Gerar Look</button>
-  <div id="look-display"></div>
-</section>
+<!-- Máquina de Looks + Upload da foto -->
+<div id="look-machine-wrapper" role="main">
+  <section id="look-machine" aria-label="Montador de looks">
+    <h2>Monte seu Look - Escolha suas peças favoritas</h2>
+    <div id="category-select" role="tablist" aria-label="Seleção de categorias de produtos">
+      <button role="tab" aria-selected="true" id="tab-roupas" aria-controls="gallery-roupas" class="active" data-cat="roupas">Roupas</button>
+      <button role="tab" aria-selected="false" id="tab-sapatos" aria-controls="gallery-sapatos" data-cat="sapatos">Sapatos</button>
+      <button role="tab" aria-selected="false" id="tab-bolsas" aria-controls="gallery-bolsas" data-cat="bolsas">Bolsas</button>
+    </div>
+    <div id="items-gallery" tabindex="0" aria-live="polite" aria-label="Galeria de produtos para seleção"></div>
+    <div id="assembled-look" aria-live="polite" aria-label="Look montado">
+      <div class="assembled-piece" aria-label="Peça de roupa selecionada">
+        <h4>Roupa</h4>
+        <img src="https://via.placeholder.com/150x140?text=Escolha" alt="Nenhuma roupa selecionada" id="assembled-roupa"/>
+        <button aria-label="Remover roupa selecionada" id="remove-roupa" title="Remover roupa">&times;</button>
+      </div>
+      <div class="assembled-piece" aria-label="Peça de sapato selecionada">
+        <h4>Sapato</h4>
+        <img src="https://via.placeholder.com/150x140?text=Escolha" alt="Nenhum sapato selecionado" id="assembled-sapato"/>
+        <button aria-label="Remover sapato selecionado" id="remove-sapato" title="Remover sapato">&times;</button>
+      </div>
+      <div class="assembled-piece" aria-label="Peça de bolsa selecionada">
+        <h4>Bolsa</h4>
+        <img src="https://via.placeholder.com/150x140?text=Escolha" alt="Nenhuma bolsa selecionada" id="assembled-bolsa"/>
+        <button aria-label="Remover bolsa selecionada" id="remove-bolsa" title="Remover bolsa">&times;</button>
+      </div>
+    </div>
+    <button id="clear-look" aria-label="Limpar look montado">Limpar look</button>
+  </section>
 
+  <section id="user-photo-container" aria-label="Upload da foto do corpo para visualização">
+    <h3>Veja como fica em você</h3>
+    <img id="user-photo" src="https://via.placeholder.com/300x400?text=Sua+foto+aqui" alt="Foto do corpo do usuário" />
+    <label for="upload-photo" id="upload-label" tabindex="0">Enviar foto do corpo</label>
+    <input type="file" id="upload-photo" accept="image/*" aria-describedby="upload-label" />
+  </section>
+</div>
+
+<!-- Contato -->
 <section id="contato" aria-label="Formulário de contato">
-  <h2>Fale conosco</h2>
-  <form id="form-contato" action="mailto:dreamlookcontato@gmail.com" method="POST" enctype="text/plain" novalidate>
+  <h2>Fale Conosco</h2>
+  <form id="form-contato" novalidate>
     <input type="text" name="nome" placeholder="Seu nome" required aria-required="true" />
-    <input type="email" name="email" placeholder="Seu e-mail" required aria-required="true" />
-    <textarea name="mensagem" rows="5" placeholder="Sua mensagem" required aria-required="true"></textarea>
-    <button type="submit">Enviar mensagem</button>
+    <input type="email" name="email" placeholder="Seu email" required aria-required="true" />
+    <textarea name="mensagem" rows="4" placeholder="Sua mensagem" required aria-required="true"></textarea>
+    <button type="submit">Enviar Mensagem</button>
   </form>
-  <div class="social-links" aria-label="Redes sociais" style="margin-top:1rem; text-align:center;">
-    <a href="https://www.instagram.com/dreamlook" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="margin: 0 0.8rem; color:#8b5570; font-weight:700; text-decoration:none;">Instagram</a>
-    <a href="https://www.facebook.com/dreamlook" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style="margin: 0 0.8rem; color:#8b5570; font-weight:700; text-decoration:none;">Facebook</a>
-    <a href="https://www.twitter.com/dreamlook" target="_blank" rel="noopener noreferrer" aria-label="Twitter" style="margin: 0 0.8rem; color:#8b5570; font-weight:700; text-decoration:none;">Twitter</a>
-  </div>
 </section>
 
-<footer>
-  &copy; 2025 DreamLook - Todos os direitos reservados
-</footer>
-
-<div id="cart" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-describedby="cart-list">
+<!-- Carrinho -->
+<div id="cart" role="dialog" aria-modal="true" aria-label="Carrinho de compras">
   <button id="cart-close" aria-label="Fechar carrinho">&times;</button>
-  <h2 id="cart-title">Carrinho de Compras</h2>
   <div id="cart-list" tabindex="0"></div>
-  <div id="cart-total"></div>
+  <div id="cart-total">Total: R$0,00</div>
   <button id="checkout-btn">Finalizar Compra</button>
 </div>
+<button id="open-cart-btn" aria-label="Abrir carrinho de compras">🛒</button>
 
-<button id="open-cart-btn" aria-label="Abrir carrinho de compras">&#128722;</button>
-
-<a href="https://wa.me/5567996524559" target="_blank" rel="noopener noreferrer" class="whatsapp-fixo" aria-label="Contato WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339-13.3 256.7-27.7 195 24.4c-33.4 29.1-44.6 66.7-45.3 67.8-4.3 12.9-4.3 27.8 0 40.7l-45.7 140.6c-8.3 25.7 9.9 52.3 36.5 52.3h44.1c7.3 0 14.5-2.6 20-7.4l58.1-50.3c10.2 7.9 22.5 12.6 35.6 12.6 39.1 0 71-31.8 71-71 0-19.6-7.8-38-22-51.4z"/></svg>
+<!-- WhatsApp fixo -->
+<a href="https://wa.me/5567996524559" target="_blank" rel="noopener" aria-label="WhatsApp DreamLook" class="whatsapp-fixo" title="Fale conosco no WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M20.52 3.48A11.954 11.954 0 0012 0C5.37 0 0 5.37 0 12a11.9 11.9 0 001.6 6.05L0 24l5.97-1.57A11.95 11.95 0 0012 24c6.63 0 12-5.37 12-12a11.954 11.954 0 00-3.48-8.52zm-8.52 16.14a7.87 7.87 0 01-4.03-1.15l-.29-.18-3.3.87.88-3.21-.19-.3a7.97 7.97 0 111.89 3.87zm4.56-5.92l-1.14-.57c-.15-.07-.35-.13-.52.13-.17.26-.65.57-.8.69-.15.13-.29.14-.54.05a7.23 7.23 0 01-2.13-1.3 8.3 8.3 0 01-1.54-1.91c-.16-.27-.02-.4.12-.54.13-.13.3-.33.44-.5.14-.17.19-.28.28-.47.09-.18.04-.34-.02-.5-.07-.17-.52-1.26-.72-1.73-.19-.44-.38-.38-.52-.39l-.44-.01a1.11 1.11 0 00-.81.38c-.27.26-1.05 1.03-1.05 2.5 0 1.46 1.08 2.88 1.23 3.08.15.2 2.12 3.26 5.13 4.57a7.97 7.97 0 004.52.63 7.38 7.38 0 002.18-1.41 7.24 7.24 0 002.02-4.06c.02-.16.02-.3 0-.42-.04-.11-.15-.18-.31-.3z"/>
+  </svg>
 </a>
 
 <script>
-  // Produtos só de moda (roupas, sapatos, bolsas)
+  // Dados exemplo produtos reais para looks
   const produtos = [
-    { id: 1, nome: "Vestido Floral Elegante", preco: 129.90, estoque: 10, img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80", categoria: "roupas" },
-    { id: 2, nome: "Camisa Social Masculina", preco: 89.90, estoque: 15, img: "https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=400&q=80", categoria: "roupas" },
-    { id: 3, nome: "Calça Jeans Skinny", preco: 99.90, estoque: 20, img: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=400&q=80", categoria: "roupas" },
-    { id: 4, nome: "Bolsa de Couro Clássica", preco: 179.90, estoque: 7, img: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=400&q=80", categoria: "bolsas" },
-    { id: 5, nome: "Tênis Casual Unissex", preco: 149.90, estoque: 12, img: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=400&q=80", categoria: "sapatos" },
-    { id: 6, nome: "Bolsa Tiracolo Moderna", preco: 139.90, estoque: 9, img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=400&q=80", categoria: "bolsas" },
-    { id: 7, nome: "Sapato Social Masculino", preco: 149.90, estoque: 5, img: "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80", categoria: "sapatos" },
-    { id: 8, nome: "Jaqueta Jeans Feminina", preco: 119.90, estoque: 14, img: "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=400&q=80", categoria: "roupas" }
+    // Roupas
+    {id: 1, categoria: 'roupas', nome: 'Vestido Floral Rosa', img: 'https://images.unsplash.com/photo-1520975699435-56bfeea6d7e8?auto=format&fit=crop&w=300&q=80'},
+    {id: 2, categoria: 'roupas', nome: 'Blusa Branca Elegante', img: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=300&q=80'},
+    {id: 3, categoria: 'roupas', nome: 'Jaqueta Jeans', img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=300&q=80'},
+    // Sapatos
+    {id: 4, categoria: 'sapatos', nome: 'Tênis Casual Branco', img: 'https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?auto=format&fit=crop&w=300&q=80'},
+    {id: 5, categoria: 'sapatos', nome: 'Sandália de Salto Rosa', img: 'https://images.unsplash.com/photo-1542068829-1115f7259450?auto=format&fit=crop&w=300&q=80'},
+    {id: 6, categoria: 'sapatos', nome: 'Bota de Couro', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=300&q=80'},
+    // Bolsas
+    {id: 7, categoria: 'bolsas', nome: 'Bolsa de Couro Marrom', img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=300&q=80'},
+    {id: 8, categoria: 'bolsas', nome: 'Bolsa Clutch Rosa', img: 'https://images.unsplash.com/photo-1503342452485-86f2f16df1ec?auto=format&fit=crop&w=300&q=80'},
+    {id: 9, categoria: 'bolsas', nome: 'Mochila Casual', img: 'https://images.unsplash.com/photo-1542068829-1115f7259450?auto=format&fit=crop&w=300&q=80'}
   ];
 
+  // Mostrar produtos destacados na página
   const produtosContainer = document.getElementById('produtos');
-
-  function renderProdutos(lista) {
+  function renderProdutos() {
     produtosContainer.innerHTML = '';
-    lista.forEach(prod => {
+    produtos.forEach(p => {
       const div = document.createElement('div');
       div.className = 'produto';
       div.innerHTML = `
-        <img src="${prod.img}" alt="${prod.nome}" />
-        <h3>${prod.nome}</h3>
-        <div class="preco">R$ ${prod.preco.toFixed(2)}</div>
-        <div class="estoque">Estoque: ${prod.estoque}</div>
-        <button ${prod.estoque <= 0 ? 'disabled' : ''} data-id="${prod.id}">Comprar</button>
+        <img src="${p.img}" alt="${p.nome}">
+        <h3>${p.nome}</h3>
+        <div class="preco">R$99,99</div>
+        <div class="estoque">Estoque disponível</div>
+        <button aria-label="Comprar ${p.nome}">Comprar</button>
       `;
       produtosContainer.appendChild(div);
     });
   }
+  renderProdutos();
 
-  renderProdutos(produtos);
+  // Quiz simples com sugestões
+  const quizContainer = document.getElementById('quiz');
+  const perguntas = [
+    {
+      pergunta: "Qual seu estilo favorito?",
+      opcoes: ["Casual", "Elegante", "Esportivo", "Romântico"]
+    },
+    {
+      pergunta: "Prefere cores?",
+      opcoes: ["ClarAs", "Escuras", "Coloridas", "Neutras"]
+    },
+    {
+      pergunta: "Que tipo de peça quer?",
+      opcoes: ["Roupas", "Sapatos", "Bolsas", "Acessórios"]
+    }
+  ];
+  let respostas = [];
+  function renderQuiz() {
+    quizContainer.innerHTML = '';
+    perguntas.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-question';
+      div.innerHTML = `<p>${p.pergunta}</p>`;
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'quiz-options';
+      p.opcoes.forEach((op, idx) => {
+        const idRadio = `q${i}_opt${idx}`;
+        const label = document.createElement('label');
+        label.setAttribute('for', idRadio);
+        label.textContent = op;
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `q${i}`;
+        input.id = idRadio;
+        input.value = op;
+        optionsDiv.appendChild(input);
+        optionsDiv.appendChild(label);
+      });
+      div.appendChild(optionsDiv);
+      quizContainer.appendChild(div);
+    });
+    const btnSubmit = document.createElement('button');
+    btnSubmit.id = 'btn-submit-quiz';
+    btnSubmit.textContent = 'Ver sugestões';
+    quizContainer.appendChild(btnSubmit);
+    btnSubmit.addEventListener('click', () => {
+      respostas = [];
+      perguntas.forEach((p, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        respostas.push(selected ? selected.value : null);
+      });
+      mostrarSugestoes();
+    });
+  }
+  function mostrarSugestoes() {
+    quizContainer.innerHTML = '<h3>Sugestões baseadas no seu perfil:</h3>';
+    // Simples filtro baseado nas respostas (exemplo)
+    let sugestoes = produtos.filter(p => {
+      if(respostas.includes('Roupas') && p.categoria === 'roupas') return true;
+      if(respostas.includes('Sapatos') && p.categoria === 'sapatos') return true;
+      if(respostas.includes('Bolsas') && p.categoria === 'bolsas') return true;
+      // Caso contrário retorna tudo
+      return respostas.every(r => r !== 'Roupas' && r !== 'Sapatos' && r !== 'Bolsas');
+    });
+    if(sugestoes.length === 0) sugestoes = produtos;
+    sugestoes.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'produto';
+      div.innerHTML = `
+        <img src="${s.img}" alt="${s.nome}" />
+        <h3>${s.nome}</h3>
+        <div class="preco">R$99,99</div>
+        <button aria-label="Comprar ${s.nome}">Comprar</button>
+      `;
+      quizContainer.appendChild(div);
+    });
+  }
+  renderQuiz();
 
-  // Carrinho simples
+  // Máquina de looks interativa
+  let categoriaAtual = 'roupas';
+  const categoryButtons = document.querySelectorAll('#category-select button');
+  const itemsGallery = document.getElementById('items-gallery');
+
+  const assembledLook = {
+    roupa: {img: null, id: null, nome: ''},
+    sapato: {img: null, id: null, nome: ''},
+    bolsa: {img: null, id: null, nome: ''}
+  };
+
+  function renderGallery(categoria) {
+    itemsGallery.innerHTML = '';
+    const lista = produtos.filter(p => p.categoria === categoria);
+    if(lista.length === 0) {
+      itemsGallery.innerHTML = "<p style='color:#7b455c; font-weight:700;'>Nenhum produto disponível nesta categoria.</p>";
+      return;
+    }
+    lista.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'item-card';
+      div.tabIndex = 0;
+      div.setAttribute('role','button');
+      div.setAttribute('aria-label', `Selecionar ${item.nome}`);
+      div.dataset.id = item.id;
+      div.dataset.categoria = item.categoria;
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.nome}" />
+        <p>${item.nome}</p>
+      `;
+      itemsGallery.appendChild(div);
+    });
+  }
+
+  function updateAssembledLook() {
+    const roupaImg = document.getElementById('assembled-roupa');
+    const sapatoImg = document.getElementById('assembled-sapato');
+    const bolsaImg = document.getElementById('assembled-bolsa');
+
+    roupaImg.src = assembledLook.roupa.img || "https://via.placeholder.com/150x140?text=Escolha";
+    roupaImg.alt = assembledLook.roupa.img ? `Roupa: ${assembledLook.roupa.nome}` : "Nenhuma roupa selecionada";
+
+    sapatoImg.src = assembledLook.sapato.img || "https://via.placeholder.com/150x140?text=Escolha";
+    sapatoImg.alt = assembledLook.sapato.img ? `Sapato: ${assembledLook.sapato.nome}` : "Nenhum sapato selecionado";
+
+    bolsaImg.src = assembledLook.bolsa.img || "https://via.placeholder.com/150x140?text=Escolha";
+    bolsaImg.alt = assembledLook.bolsa.img ? `Bolsa: ${assembledLook.bolsa.nome}` : "Nenhuma bolsa selecionada";
+  }
+
+  // Inicializar gallery com roupas
+  renderGallery(categoriaAtual);
+
+  // Atualizar tab ARIA e classes
+  function atualizarAcessibilidadeTabs(cat) {
+    categoryButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.cat === cat);
+      btn.setAttribute('aria-selected', btn.dataset.cat === cat);
+      btn.tabIndex = btn.dataset.cat === cat ? 0 : -1;
+    });
+  }
+  atualizarAcessibilidadeTabs(categoriaAtual);
+
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(btn.dataset.cat === categoriaAtual) return;
+      categoriaAtual = btn.dataset.cat;
+      renderGallery(categoriaAtual);
+      atualizarAcessibilidadeTabs(categoriaAtual);
+    });
+  });
+
+  itemsGallery.addEventListener('click', e => {
+    let card = e.target;
+    while(card && !card.classList.contains('item-card')) {
+      card = card.parentElement;
+    }
+    if(!card) return;
+    const id = +card.dataset.id;
+    const categoria = card.dataset.categoria;
+    const prod = produtos.find(p => p.id === id);
+    if(prod) {
+      assembledLook[categoria] = {img: prod.img, id: prod.id, nome: prod.nome};
+      updateAssembledLook();
+    }
+  });
+
+  // Seleção via teclado Enter ou Space
+  itemsGallery.addEventListener('keydown', e => {
+    if(e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
+  // Botões remover peças
+  document.getElementById('remove-roupa').addEventListener('click', () => {
+    assembledLook.roupa = {img: null, id: null, nome: ''};
+    updateAssembledLook();
+  });
+  document.getElementById('remove-sapato').addEventListener('click', () => {
+    assembledLook.sapato = {img: null, id: null, nome: ''};
+    updateAssembledLook();
+  });
+  document.getElementById('remove-bolsa').addEventListener('click', () => {
+    assembledLook.bolsa = {img: null, id: null, nome: ''};
+    updateAssembledLook();
+  });
+
+  document.getElementById('clear-look').addEventListener('click', () => {
+    assembledLook.roupa = {img: null, id: null, nome: ''};
+    assembledLook.sapato = {img: null, id: null, nome: ''};
+    assembledLook.bolsa = {img: null, id: null, nome: ''};
+    updateAssembledLook();
+  });
+
+  // Upload e exibição da foto do corpo
+  const uploadInput = document.getElementById('upload-photo');
+  const userPhoto = document.getElementById('user-photo');
+
+  uploadInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')) {
+      alert("Por favor, envie um arquivo de imagem válido.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      userPhoto.src = event.target.result;
+      userPhoto.alt = "Foto do corpo do usuário enviada";
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Formulário contato
+  const formContato = document.getElementById('form-contato');
+  formContato.addEventListener('submit', e => {
+    e.preventDefault();
+    const nome = formContato.nome.value.trim();
+    const email = formContato.email.value.trim();
+    const mensagem = formContato.mensagem.value.trim();
+    if(nome === '' || email === '' || mensagem === '') {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+    // Aqui pode integrar com backend ou serviço de email
+    alert(`Obrigado, ${nome}! Sua mensagem foi enviada com sucesso.`);
+    formContato.reset();
+  });
+
+  // Carrinho básico (sem backend)
+  const openCartBtn = document.getElementById('open-cart-btn');
+  const cart = document.getElementById('cart');
+  const cartClose = document.getElementById('cart-close');
+  const cartList = document.getElementById('cart-list');
+  const cartTotal = document.getElementById('cart-total');
+  const checkoutBtn = document.getElementById('checkout-btn');
+
   let carrinho = [];
 
   function atualizarCarrinho() {
-    const cartList = document.getElementById('cart-list');
-    const cartTotal = document.getElementById('cart-total');
     cartList.innerHTML = '';
-
     let total = 0;
-    carrinho.forEach(item => {
-      const produto = produtos.find(p => p.id === item.id);
-      if(!produto) return;
+    carrinho.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = 'cart-item';
-      div.innerHTML = `
-        ${produto.nome} x ${item.quantidade} 
-        <button data-id="${produto.id}" aria-label="Remover ${produto.nome} do carrinho">&times;</button>
-      `;
+      div.textContent = `${item.nome} - R$99,99`;
+      const btnRemove = document.createElement('button');
+      btnRemove.textContent = 'X';
+      btnRemove.setAttribute('aria-label', `Remover ${item.nome} do carrinho`);
+      btnRemove.addEventListener('click', () => {
+        carrinho.splice(idx,1);
+        atualizarCarrinho();
+      });
+      div.appendChild(btnRemove);
       cartList.appendChild(div);
-      total += produto.preco * item.quantidade;
+      total += 99.99;
     });
-    cartTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    cartTotal.textContent = `Total: R$${total.toFixed(2)}`;
+    if(carrinho.length === 0) {
+      cartList.textContent = 'Seu carrinho está vazio.';
+      checkoutBtn.disabled = true;
+    } else {
+      checkoutBtn.disabled = false;
+    }
   }
+  atualizarCarrinho();
 
+  openCartBtn.addEventListener('click', () => {
+    cart.style.display = 'flex';
+    cart.setAttribute('aria-hidden', 'false');
+    cart.focus();
+  });
+  cartClose.addEventListener('click', () => {
+    cart.style.display = 'none';
+    cart.setAttribute('aria-hidden', 'true');
+    openCartBtn.focus();
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    alert("Checkout não implementado. Integre com seu sistema de pagamentos.");
+  });
+
+  // Comprar produto na lista e quiz
   produtosContainer.addEventListener('click', e => {
     if(e.target.tagName === 'BUTTON') {
-      const id = +e.target.getAttribute('data-id');
-      const prodCarrinho = carrinho.find(item => item.id === id);
-      if(prodCarrinho) {
-        prodCarrinho.quantidade++;
-      } else {
-        carrinho.push({id: id, quantidade: 1});
-      }
+      const nomeProd = e.target.parentElement.querySelector('h3').textContent;
+      carrinho.push({nome: nomeProd});
       atualizarCarrinho();
-      alert("Produto adicionado ao carrinho!");
+      alert(`${nomeProd} adicionado ao carrinho!`);
     }
   });
-
-  document.getElementById('open-cart-btn').addEventListener('click', () => {
-    document.getElementById('cart').style.display = 'flex';
-  });
-
-  document.getElementById('cart-close').addEventListener('click', () => {
-    document.getElementById('cart').style.display = 'none';
-  });
-
-  document.getElementById('cart-list').addEventListener('click', e => {
-    if(e.target.tagName === 'BUTTON') {
-      const id = +e.target.getAttribute('data-id');
-      carrinho = carrinho.filter(item => item.id !== id);
+  quizContainer.addEventListener('click', e => {
+    if(e.target.tagName === 'BUTTON' && e.target.textContent.startsWith('Comprar')) {
+      const nomeProd = e.target.parentElement.querySelector('h3').textContent;
+      carrinho.push({nome: nomeProd});
       atualizarCarrinho();
+      alert(`${nomeProd} adicionado ao carrinho!`);
     }
   });
 
-  document.getElementById('checkout-btn').addEventListener('click', () => {
-    if(carrinho.length === 0) {
-      alert("Seu carrinho está vazio!");
-      return;
-    }
-    alert("Checkout simulado. Integre um sistema real para finalizar compras.");
-  });
-
-  // Quiz focado em moda
-  const quizData = [
-    {
-      pergunta: "Qual categoria de moda você procura?",
-      opcoes: [
-        { texto: "Roupas", categoria: "roupas" },
-        { texto: "Sapatos", categoria: "sapatos" },
-        { texto: "Bolsas", categoria: "bolsas" }
-      ]
-    },
-    {
-      pergunta: "Qual faixa de preço prefere?",
-      opcoes: [
-        { texto: "Até R$80", faixaPreco: "ate80" },
-        { texto: "De R$80 a R$130", faixaPreco: "80a130" },
-        { texto: "Acima de R$130", faixaPreco: "mais130" }
-      ]
-    },
-    {
-      pergunta: "Qual estilo você prefere?",
-      opcoes: [
-        { texto: "Casual", estilo: "casual" },
-        { texto: "Formal", estilo: "formal" },
-        { texto: "Esportivo", estilo: "esportivo" }
-      ]
-    }
-  ];
-
-  const quizContainer = document.getElementById('quiz');
-  let respostas = [];
-  let perguntaAtual = 0;
-
-  function renderQuiz() {
-    quizContainer.innerHTML = '';
-    if(perguntaAtual < quizData.length) {
-      const q = quizData[perguntaAtual];
-      const div = document.createElement('div');
-      div.className = 'quiz-question';
-      div.innerHTML = `<p>${q.pergunta}</p>`;
-      const opcoesDiv = document.createElement('div');
-      opcoesDiv.className = 'quiz-options';
-      q.opcoes.forEach((op, i) => {
-        const id = `q${perguntaAtual}_op${i}`;
-        const label = document.createElement('label');
-        label.htmlFor = id;
-        label.textContent = op.texto;
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = `q${perguntaAtual}`;
-        input.id = id;
-        input.value = i;
-        input.required = true;
-        label.prepend(input);
-        opcoesDiv.appendChild(label);
-      });
-      div.appendChild(opcoesDiv);
-      quizContainer.appendChild(div);
-
-      const btn = document.createElement('button');
-      btn.id = 'btn-submit-quiz';
-      btn.textContent = perguntaAtual === quizData.length - 1 ? "Ver sugestões" : "Próxima";
-      quizContainer.appendChild(btn);
-
-      btn.addEventListener('click', () => {
-        const selecionado = quizContainer.querySelector(`input[name=q${perguntaAtual}]:checked`);
-        if(!selecionado) {
-          alert("Por favor, selecione uma opção.");
-          return;
-        }
-        respostas[perguntaAtual] = parseInt(selecionado.value);
-        perguntaAtual++;
-        if(perguntaAtual === quizData.length) {
-          mostrarSugestoes();
-        } else {
-          renderQuiz();
-        }
-      });
-    }
-  }
-
-  function mostrarSugestoes() {
-    quizContainer.innerHTML = "<h2>Sugestões para você:</h2>";
-    const categoriaEscolhida = quizData[0].opcoes[respostas[0]]?.categoria || "";
-    const faixaPrecoEscolhida = quizData[1].opcoes[respostas[1]]?.faixaPreco || "";
-
-    let sugestoes = produtos.filter(p => {
-      let ok = true;
-      if(categoriaEscolhida && p.categoria !== categoriaEscolhida) ok = false;
-      if(faixaPrecoEscolhida) {
-        if(faixaPrecoEscolhida === "ate80" && p.preco > 80) ok = false;
-        else if(faixaPrecoEscolhida === "80a130" && (p.preco < 80 || p.preco > 130)) ok = false;
-        else if(faixaPrecoEscolhida === "mais130" && p.preco <= 130) ok = false;
-      }
-      return ok;
-    });
-
-    if(sugestoes.length === 0) {
-      quizContainer.innerHTML += "<p>Desculpe, não encontramos produtos que correspondam às suas escolhas.</p>";
-      return;
-    }
-
-    const sugestoesDiv = document.createElement('div');
-    sugestoesDiv.style.display = 'flex';
-    sugestoesDiv.style.flexWrap = 'wrap';
-    sugestoesDiv.style.justifyContent = 'center';
-    sugestoesDiv.style.gap = '1rem';
-    sugestoesDiv.style.marginTop = '1rem';
-
-    sugestoes.forEach(prod => {
-      const div = document.createElement('div');
-      div.className = 'produto';
-      div.style.width = '200px';
-      div.innerHTML = `
-        <img src="${prod.img}" alt="${prod.nome}" />
-        <h3>${prod.nome}</h3>
-        <div class="preco">R$ ${prod.preco.toFixed(2)}</div>
-        <div class="estoque">Estoque: ${prod.estoque}</div>
-        <button ${prod.estoque <= 0 ? 'disabled' : ''} data-id="${prod.id}">Comprar</button>
-      `;
-      sugestoesDiv.appendChild(div);
-    });
-
-    quizContainer.appendChild(sugestoesDiv);
-
-    sugestoesDiv.addEventListener('click', e => {
-      if(e.target.tagName === 'BUTTON') {
-        const id = +e.target.getAttribute('data-id');
-        const prodCarrinho = carrinho.find(item => item.id === id);
-        if(prodCarrinho) {
-          prodCarrinho.quantidade++;
-        } else {
-          carrinho.push({id: id, quantidade: 1});
-        }
-        atualizarCarrinho();
-        alert("Produto adicionado ao carrinho!");
-      }
-    });
-  }
-
-  renderQuiz();
-
-  // Máquina de looks
-  const lookDisplay = document.getElementById('look-display');
-  const btnGerarLook = document.getElementById('btn-gerar-look');
-
-  function gerarLook() {
-    function getRandomProduto(categoria) {
-      const list = produtos.filter(p => p.categoria === categoria && p.estoque > 0);
-      if (list.length === 0) return null;
-      return list[Math.floor(Math.random() * list.length)];
-    }
-
-    const roupa = getRandomProduto('roupas');
-    const sapato = getRandomProduto('sapatos');
-    const bolsa = getRandomProduto('bolsas');
-
-    if (!roupa && !sapato && !bolsa) {
-      lookDisplay.innerHTML = "<p style='color:#7d4056; font-weight:700;'>Não há produtos disponíveis para montar um look.</p>";
-      return;
-    }
-
-    lookDisplay.innerHTML = '';
-
-    function criarCard(prod) {
-      if (!prod) return null;
-      const div = document.createElement('div');
-      div.style.width = '200px';
-      div.style.background = '#f6e7ec';
-      div.style.borderRadius = '12px';
-      div.style.boxShadow = '0 4px 10px rgba(139,85,112,0.3)';
-      div.style.padding = '0.7rem';
-      div.style.fontFamily = "'Georgia', serif";
-      div.style.color = '#7b455c';
-
-      div.innerHTML = `
-        <img src="${prod.img}" alt="${prod.nome}" style="width:100%; border-radius:10px; height:170px; object-fit:cover; filter: drop-shadow(1px 1px 1px #a87a91); margin-bottom:0.7rem;">
-        <h3 style="font-weight:700; font-size:1.1rem; margin-bottom:0.4rem;">${prod.nome}</h3>
-        <div style="font-weight:700; color:#7d4056; margin-bottom:0.3rem;">R$ ${prod.preco.toFixed(2)}</div>
-        <button style="background-color:#8b5570; color:#fff; border:none; padding:0.5rem 0; border-radius:8px; cursor:pointer; font-weight:700; width:100%;" data-id="${prod.id}">Comprar</button>
-      `;
-
-      const btn = div.querySelector('button');
-      btn.addEventListener('click', () => {
-        const prodCarrinho = carrinho.find(item => item.id === prod.id);
-        if(prodCarrinho) {
-          prodCarrinho.quantidade++;
-        } else {
-          carrinho.push({id: prod.id, quantidade: 1});
-        }
-        atualizarCarrinho();
-        alert("Produto adicionado ao carrinho!");
-      });
-
-      return div;
-    }
-
-    const cards = [roupa, sapato, bolsa].map(criarCard).filter(c => c !== null);
-    cards.forEach(card => lookDisplay.appendChild(card));
-  }
-
-  btnGerarLook.addEventListener('click', gerarLook);
 </script>
-
 </body>
 </html>
+
+    
 
