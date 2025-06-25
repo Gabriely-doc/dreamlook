@@ -1,172 +1,533 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Achadinhos Beauty</title>
+  <title>Achadinhos Beauty - Sua loja de beleza online</title>
   <style>
-    :root {
-      --rosa-principal: #ff69b4;
-      --rosa-claro: #ffc0cb;
-      --rosa-escuro: #e91e63;
-    }
+    /* Reset e base */
     * {
       box-sizing: border-box;
     }
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      background-color: #fff0f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff0f5;
       color: #333;
+      line-height: 1.6;
+    }
+    a {
+      color: #d63384;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #ff1493;
     }
     header {
-      background-color: var(--rosa-principal);
+      background: linear-gradient(90deg, #ff6fb5, #ff1493);
       color: white;
-      padding: 30px;
+      padding: 1.5rem 1rem;
       text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 3px 6px rgba(255,20,147,0.4);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 900;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
     }
     nav {
-      background-color: var(--rosa-claro);
-      padding: 15px;
-      text-align: center;
+      margin-top: 0.8rem;
     }
     nav a {
-      color: #fff;
-      margin: 0 20px;
-      text-decoration: none;
-      font-weight: bold;
+      margin: 0 1rem;
+      font-weight: 600;
+      font-size: 1rem;
     }
-    .produtos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 30px;
+
+    /* Banner rotativo */
+    #banner {
+      background: #ffe4e1;
+      color: #d63384;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      height: 2.5rem;
+    }
+    #banner span {
+      position: absolute;
+      width: 100%;
+      animation: slideBanner 12s linear infinite;
+    }
+    #banner span:nth-child(2) {
+      animation-delay: 4s;
+    }
+    #banner span:nth-child(3) {
+      animation-delay: 8s;
+    }
+    @keyframes slideBanner {
+      0% {top: 100%;}
+      10% {top: 0;}
+      33% {top: 0;}
+      43% {top: -100%;}
+      100% {top: -100%;}
+    }
+
+    /* Container principal */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Produtos */
+    #produtos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 1.8rem;
     }
     .produto {
-      background-color: white;
+      background: white;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      margin: 15px;
-      padding: 20px;
-      width: 250px;
+      box-shadow: 0 2px 8px rgba(255,20,147,0.15);
+      padding: 1rem;
       text-align: center;
-      transition: transform 0.3s ease;
-    }
-    .produto:hover {
-      transform: scale(1.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
     }
     .produto img {
       width: 100%;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+      object-fit: cover;
+      height: 230px;
     }
     .produto h3 {
-      margin: 10px 0;
-      color: var(--rosa-escuro);
+      margin: 0.3rem 0;
+      font-weight: 700;
+      color: #ff1493;
     }
-    .produto p {
-      margin-bottom: 10px;
+    .produto p.preco {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #d63384;
+      margin: 0.3rem 0 1rem;
+    }
+    .produto p.estoque {
+      color: #ff4444;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.7rem;
     }
     .produto button {
-      background-color: var(--rosa-escuro);
+      background: #ff1493;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 20px;
+      padding: 0.7rem 0;
+      border-radius: 8px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
+      transition: background 0.3s ease;
+      user-select: none;
     }
     .produto button:hover {
-      background-color: #c2185b;
+      background: #d63384;
     }
+
+    /* Carrinho flutuante */
+    #cart {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      background: #ff1493;
+      color: white;
+      width: 320px;
+      max-height: 420px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(255,20,147,0.4);
+      padding: 1rem;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    #cart h2 {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-weight: 800;
+      text-align: center;
+    }
+    #cart-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      background: #fff0f5;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      align-items: center;
+    }
+    .cart-item span {
+      flex: 1;
+    }
+    .cart-item button {
+      background: transparent;
+      border: none;
+      color: #ff4444;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 900;
+      user-select: none;
+    }
+    #cart-total {
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: right;
+      margin-bottom: 1rem;
+    }
+    #checkout-btn {
+      background: white;
+      color: #ff1493;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+    #checkout-btn:hover {
+      background: #ffe4e1;
+    }
+    #cart-close {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #ff4444;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Botão abrir carrinho */
+    #open-cart-btn {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      background: #ff1493;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      font-size: 1.7rem;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255,20,147,0.5);
+      z-index: 999;
+      transition: background 0.3s ease;
+    }
+    #open-cart-btn:hover {
+      background: #d63384;
+    }
+
+    /* Contador de urgência */
+    #urgency-timer {
+      background: #ff1493;
+      color: white;
+      font-weight: 700;
+      text-align: center;
+      padding: 0.7rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 3px 10px rgba(255,20,147,0.4);
+    }
+
+    /* Depoimentos */
+    #testimonials {
+      background: #ffe4e1;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      border-radius: 12px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 8px rgba(255,20,147,0.3);
+    }
+    #testimonials h2 {
+      text-align: center;
+      font-weight: 900;
+      color: #d63384;
+      margin-bottom: 1rem;
+    }
+    .testimonial {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 6px rgba(255,20,147,0.2);
+      font-style: italic;
+      position: relative;
+    }
+    .testimonial::before {
+      content: "“";
+      font-size: 3rem;
+      color: #ff1493;
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      font-weight: 900;
+    }
+    .testimonial p {
+      margin: 0.4rem 0 0;
+      font-size: 1rem;
+      color: #555;
+    }
+    .testimonial span {
+      display: block;
+      text-align: right;
+      font-weight: 700;
+      margin-top: 0.6rem;
+      color: #d63384;
+    }
+
+    /* Quiz de beleza */
+    #quiz {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: #fff0f5;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,20,147,0.2);
+    }
+    #quiz h2 {
+      text-align: center;
+      color: #d63384;
+      font-weight: 900;
+      margin-bottom: 1.2rem;
+    }
+    .quiz-question {
+      margin-bottom: 1rem;
+    }
+    .quiz-question p {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .quiz-options label {
+      display: block;
+      margin-bottom: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .quiz-options input {
+      margin-right: 0.6rem;
+      cursor: pointer;
+    }
+    #quiz-result {
+      margin-top: 1rem;
+      font-weight: 700;
+      color: #ff1493;
+      text-align: center;
+    }
+    #quiz button {
+      background: #ff1493;
+      border: none;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      font-weight: 800;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 1rem auto 0;
+      transition: background 0.3s ease;
+    }
+    #quiz button:hover {
+      background: #d63384;
+    }
+
+    /* Contato */
+    #contato {
+      max-width: 700px;
+      margin: 3rem auto 5rem;
+      background: #ffe4e1;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(255,20,147,0.3);
+      text-align: center;
+      color: #333;
+    }
+    #contato h2 {
+      color: #d63384;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    #contato form {
+      margin-top: 1rem;
+    }
+    #contato input, #contato textarea {
+      width: 90%;
+      max-width: 400px;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    #contato button {
+      background: #ff1493;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+    #contato button:hover {
+      background: #d63384;
+    }
+    .social-links {
+      margin-top: 1.5rem;
+    }
+    .social-links a {
+      margin: 0 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ff1493;
+    }
+    .social-links a:hover {
+      color: #d63384;
+    }
+
+    /* Footer */
     footer {
-      background-color: var(--rosa-principal);
+      background: #ff1493;
       color: white;
       text-align: center;
-      padding: 20px;
+      padding: 1rem 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
     }
-    @media (max-width: 768px) {
-      .produtos {
-        flex-direction: column;
-        align-items: center;
-      }
+
+    /* Pop-up cupom */
+    #popup-cupom {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff1493;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(255,20,147,0.5);
+      display: none;
+      cursor: pointer;
+      z-index: 10000;
+      user-select: none;
+      animation: pulse 2.5s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff1493; }
+      50% { box-shadow: 0 0 25px #ff69b4; }
+      100% { box-shadow: 0 0 10px #ff1493; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Achadinhos Beauty</h1>
-    <p>Beleza e fofura direto da Shopee para você!</p>
-  </header>
 
+<header>
+  <h1>Achadinhos Beauty 💖</h1>
   <nav>
-    <a href="#">Início</a>
     <a href="#produtos">Produtos</a>
-    <a href="#sobre">Sobre</a>
+    <a href="#quiz">Quiz de Beleza</a>
     <a href="#contato">Contato</a>
-    <a href="#rastreio">Rastreio</a>
   </nav>
+</header>
 
-  <section id="produtos" class="produtos">
-    <div class="produto">
-      <img src="https://images.unsplash.com/photo-1589987607627-7236591fa4d5?fit=crop&w=500&q=80" alt="Esponja de maquiagem" />
-      <h3>Esponja Mágica</h3>
-      <p>R$ 14,90</p>
-      <button onclick="adicionarCarrinho('Esponja Mágica', 14.90)">Comprar</button>
+<div id="banner" aria-live="polite" aria-atomic="true">
+  <span>✨ Frete grátis para compras acima de R$99!</span>
+  <span>💖 Produtos das nossas lojas queridinhas!</span>
+  <span>🎁 Use o cupom BELEZA10 para 10% OFF!</span>
+</div>
+
+<div class="container">
+
+  <div id="urgency-timer" aria-live="polite">
+    ⏰ Oferta termina em: <span id="countdown">00:00:00</span>
+  </div>
+
+  <section id="produtos" aria-label="Produtos em destaque">
+    <!-- Produtos serão inseridos por JS -->
+  </section>
+
+  <section id="testimonials" aria-label="Depoimentos de clientes">
+    <h2>O que nossas clientes dizem</h2>
+    <div class="testimonial">
+      <p>“Amei a qualidade dos produtos! Entrega super rápida e atendimento incrível.”</p>
+      <span>– Marina S.</span>
     </div>
-    <div class="produto">
-      <img src="https://images.unsplash.com/photo-1608219835923-582e84e5f4cf?fit=crop&w=500&q=80" alt="Organizador rosa" />
-      <h3>Organizador Rosa</h3>
-      <p>R$ 29,90</p>
-      <button onclick="adicionarCarrinho('Organizador Rosa', 29.90)">Comprar</button>
+    <div class="testimonial">
+      <p>“Usei o batom matte e durou o dia inteiro. Recomendo muito!”</p>
+      <span>– Juliana M.</span>
     </div>
-    <div class="produto">
-      <img src="https://images.unsplash.com/photo-1596464716124-b1bdbdb2395e?fit=crop&w=500&q=80" alt="Mini espelho led" />
-      <h3>Mini Espelho LED</h3>
-      <p>R$ 39,90</p>
-      <button onclick="adicionarCarrinho('Mini Espelho LED', 39.90)">Comprar</button>
+    <div class="testimonial">
+      <p>“A loja é linda, fácil de navegar e os preços são ótimos.”</p>
+      <span>– Larissa P.</span>
     </div>
   </section>
 
-  <section id="sobre" style="padding: 30px; text-align: center;">
-    <h2>Sobre a loja</h2>
-    <p>
-      A Achadinhos Beauty nasceu com a missão de trazer os produtos mais fofos e funcionais de beleza diretamente para você,
-      com preço justo e entrega garantida.
-    </p>
+  <section id="quiz" aria-label="Quiz para descobrir seu produto ideal">
+    <h2>Descubra qual produto combina com você!</h2>
+    <div class="quiz-question">
+      <p>Qual seu estilo favorito?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="estilo" value="batom"> Romântico</label>
+        <label><input type="radio" name="estilo" value="paleta"> Dramático</label>
+        <label><input type="radio" name="estilo" value="base"> Natural</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <p>Qual é sua prioridade em maquiagem?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="prioridade" value="batom"> Cor marcante</label>
+        <label><input type="radio" name="prioridade" value="paleta"> Variedade de cores</label>
+        <label><input type="radio" name="prioridade" value="base"> Aparência natural</label>
+      </div>
+    </div>
+    <button id="quiz-submit">Ver resultado</button>
+    <div id="quiz-result" role="region" aria-live="polite"></div>
   </section>
 
-  <section id="contato" style="padding: 30px; text-align: center;">
-    <h2>Fale Conosco</h2>
-    <p>Email: atendimento@achadinhosbeauty.com.br</p>
-    <p>WhatsApp: (67) 99652-4559</p>
-  </section>
-
-  <section id="rastreio" style="padding: 30px; text-align: center;">
-    <h2>Rastreie seu pedido</h2>
-    <p>
-      Digite o código de rastreio recebido por email em apps como
-      <a href="https://www.muambator.com.br/" target="_blank">Muambator</a> ou
-      <a href="https://rastreamento.correios.com.br/" target="_blank">Correios</a>.
-    </p>
-  </section>
-
-  <footer>
-    © 2025 Achadinhos Beauty • Todos os direitos reservados
-  </footer>
-
-  <script>
-    let carrinho = [];
-
-    function adicionarCarrinho(produto, preco) {
-      carrinho.push({ produto, preco });
-      alert(`${produto} adicionado ao carrinho! Total: R$ ${somaCarrinho().toFixed(2)}`);
-    }
-
-    function somaCarrinho() {
-      return carrinho.reduce((total, item) => total + item.preco, 0);
-    }
-  </script>
-</body>
-</html>
-
+  <section id="contato" aria-label="Formulário de contato">
+    <h2>Contato</h2>
+    <p>Tem alguma dúvida ou sugestão? Entre em contato conosco!</p>
+    <form action="https://formsubmit.co/achadinhosbeauty6@gmail.com" method="POST">
+      <input type="text" name="nome" placeholder="Seu nome" required aria-label="Seu nome" />
+      <input type="email" name="email" placeholder="Seu e-mail" required aria-label="Seu e-mail" />
+      <textarea name="mensagem" placeholder="Escreva sua mensagem aqui" rows="4" required aria-label="Sua mensagem"></textarea>
+      <button type="submit">Enviar mensagem</button>
+    </form>
+    <div class
