@@ -397,3 +397,448 @@
       border: 1px solid #ccc;
       font-size: 1rem;
       font-family: inherit;
+      color: #4b3b2b;
+    }
+    #contato input::placeholder, #contato textarea::placeholder {
+      color: #a38691;
+    }
+    #contato button {
+      background: #d9a6b3;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      color: #4b3b2b;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+    #contato button:hover {
+      background: #af7f8c;
+      color: #fff;
+    }
+    .social-links {
+      margin-top: 1.5rem;
+    }
+    .social-links a {
+      margin: 0 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #af7f8c;
+      text-decoration: none;
+    }
+    .social-links a:hover {
+      color: #d9a6b3;
+    }
+
+    /* Footer */
+    footer {
+      background: #af7f8c;
+      color: #f5efe6;
+      text-align: center;
+      padding: 1rem 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Pop-up cupom */
+    #popup-cupom {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #d9a6b3;
+      color: #5a3e46;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(174, 127, 140, 0.5);
+      display: none;
+      cursor: pointer;
+      z-index: 10000;
+      user-select: none;
+      animation: pulse 2.5s infinite;
+    }
+    #popup-cupom:hover {
+      background: #af7f8c;
+      color: #fff;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #af7f8c; }
+      50% { box-shadow: 0 0 25px #d9a6b3; }
+      100% { box-shadow: 0 0 10px #af7f8c; }
+    }
+
+    /* WhatsApp fixo */
+    a[href*="wa.me"] {
+      position: fixed;
+      right: 20px;
+      bottom: 120px;
+      background-color: #af7f8c !important;
+      color: white !important;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(174, 127, 140, 0.4) !important;
+      z-index: 10000;
+      cursor: pointer;
+      text-decoration: none !important;
+      transition: background-color 0.3s ease;
+      font-size: 28px;
+    }
+    a[href*="wa.me"]:hover {
+      background-color: #d9a6b3 !important;
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      #cart {
+        width: 90%;
+        bottom: 80px;
+        right: 5%;
+      }
+      #open-cart-btn {
+        right: 1rem;
+        bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Achadinhos Beauty 💖</h1>
+  <nav>
+    <a href="#produtos">Produtos</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#contato">Contato</a>
+  </nav>
+</header>
+
+<div id="banner" aria-live="polite" aria-atomic="true">
+  <span>✨ Frete grátis para compras acima de R$99!</span>
+  <span>💖 Produtos das nossas lojas queridinhas!</span>
+  <span>🎁 Use o cupom BELEZA10 para 10% OFF!</span>
+</div>
+
+<div class="container">
+
+  <div id="urgency-timer" aria-label="Contador regressivo de oferta">Oferta termina em <span id="countdown">00:60:00</span></div>
+
+  <section id="produtos" aria-label="Produtos em destaque">
+    <!-- Produtos gerados pelo JS aqui -->
+  </section>
+
+  <section id="quiz" aria-label="Quiz para ajudar a encontrar produtos">
+    <!-- Quiz gerado pelo JS -->
+  </section>
+
+  <section id="testimonials" aria-label="Depoimentos de clientes">
+    <h2>O que dizem nossos clientes</h2>
+    <div class="testimonial">
+      <p>Adorei os achadinhos! Produtos de ótima qualidade e preço justo.</p>
+      <span>- Ana S.</span>
+    </div>
+    <div class="testimonial">
+      <p>O atendimento pelo WhatsApp é rápido e super atencioso, recomendo!</p>
+      <span>- Lucas M.</span>
+    </div>
+    <div class="testimonial">
+      <p>Comprei várias vezes e sempre chegou antes do prazo, confiável demais.</p>
+      <span>- Mariana T.</span>
+    </div>
+  </section>
+
+  <section id="contato" aria-label="Formulário de contato">
+    <h2>Fale conosco</h2>
+    <form id="form-contato" action="mailto:achadinhosbeauty6@gmail.com" method="POST" enctype="text/plain" novalidate>
+      <input type="text" name="nome" placeholder="Seu nome" required aria-required="true" />
+      <input type="email" name="email" placeholder="Seu e-mail" required aria-required="true" />
+      <textarea name="mensagem" rows="5" placeholder="Sua mensagem" required aria-required="true"></textarea>
+      <button type="submit">Enviar mensagem</button>
+    </form>
+    <div class="social-links" aria-label="Redes sociais">
+      <a href="https://www.instagram.com/achadinhosbeauty" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
+      <a href="https://www.facebook.com/achadinhosbeauty" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
+      <a href="https://www.twitter.com/achadinhosbeauty" target="_blank" rel="noopener noreferrer" aria-label="Twitter">Twitter</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  &copy; 2025 Achadinhos Beauty - Todos os direitos reservados
+</footer>
+
+<!-- Carrinho -->
+<div id="cart" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-describedby="cart-list">
+  <h2 id="cart-title">Seu Carrinho</h2>
+  <div id="cart-list"></div>
+  <div id="cart-total"></div>
+  <button id="checkout-btn">Finalizar Compra</button>
+  <div id="cart-close" aria-label="Fechar carrinho" role="button" tabindex="0">×</div>
+</div>
+
+<!-- Botão abrir carrinho -->
+<button id="open-cart-btn" aria-label="Abrir carrinho de compras">🛒</button>
+
+<!-- WhatsApp fixo -->
+<a href="https://wa.me/5567996524559" target="_blank" aria-label="Contato via WhatsApp" rel="noopener noreferrer">
+  <svg aria-hidden="true" focusable="false" width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.52 3.48a11.897 11.897 0 00-16.83 0 11.896 11.896 0 00-3.48 8.42 11.81 11.81 0 002.3 6.38l-1.39 4.95 5.1-1.34a11.867 11.867 0 006.46 1.85c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.52-8.43zm-8.15 15.13a8.1 8.1 0 01-4.27-1.22l-.31-.19-3.03.8.81-2.96-.2-.3a8.05 8.05 0 0113.91-5.36 8.1 8.1 0 01-6.2 8.27zm4.44-5.9c-.24-.12-1.42-.7-1.65-.78-.23-.08-.39-.12-.56.12-.18.24-.7.78-.86.94-.16.17-.32.19-.56.06-.24-.12-1-0.38-1.9-1.18-.7-.62-1.17-1.39-1.31-1.63-.14-.24-.02-.37.1-.49.1-.1.24-.26.36-.39.12-.13.16-.22.24-.37.08-.13.04-.25-.02-.37-.06-.12-.56-1.35-.77-1.85-.2-.48-.4-.41-.56-.41-.15 0-.32-.02-.49-.02a1.22 1.22 0 0 0-.56.12c-.24.13-.73.72-.73 1.77 0 1.05.75 2.06.86 2.2.12.13 1.49 2.27 3.6 3.18.5.22.89.35 1.19.45.5.16.96.14 1.32.08.4-.06 1.42-.58 1.62-1.14.19-.57.19-1.05.14-1.14-.06-.1-.22-.16-.46-.28z"/>
+  </svg>
+</a>
+
+<script>
+  // Produtos variados para o site - mais abrangente
+  const produtos = [
+    { id: 1, nome: "Batom Hidratante", preco: 25.90, estoque: 15, imagem: "https://i.imgur.com/4ZQxD7u.jpg" },
+    { id: 2, nome: "Paleta de Sombras", preco: 89.90, estoque: 7, imagem: "https://i.imgur.com/G6vScXA.jpg" },
+    { id: 3, nome: "Máscara de Cílios", preco: 35.50, estoque: 20, imagem: "https://i.imgur.com/6yPnEZD.jpg" },
+    { id: 4, nome: "Perfume Floral", preco: 120.00, estoque: 5, imagem: "https://i.imgur.com/ZZr7bFL.jpg" },
+    { id: 5, nome: "Secador de Cabelo", preco: 220.00, estoque: 3, imagem: "https://i.imgur.com/64RoY5p.jpg" },
+    { id: 6, nome: "Esfoliante Facial", preco: 45.90, estoque: 12, imagem: "https://i.imgur.com/xKU6z1v.jpg" },
+    { id: 7, nome: "Escova de Cabelo", preco: 18.75, estoque: 30, imagem: "https://i.imgur.com/jdbR1UV.jpg" },
+    { id: 8, nome: "Loção Corporal", preco: 32.80, estoque: 25, imagem: "https://i.imgur.com/c7RxM92.jpg" }
+  ];
+
+  const produtosContainer = document.getElementById("produtos");
+
+  function formatarPreco(preco) {
+    return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function gerarProdutos() {
+    produtosContainer.innerHTML = "";
+    produtos.forEach(produto => {
+      const div = document.createElement("div");
+      div.className = "produto";
+      div.innerHTML = `
+        <img src="${produto.imagem}" alt="${produto.nome}" />
+        <h3>${produto.nome}</h3>
+        <p class="preco">${formatarPreco(produto.preco)}</p>
+        <p class="estoque">${produto.estoque > 0 ? produto.estoque + " unidades disponíveis" : "Esgotado"}</p>
+        <button ${produto.estoque === 0 ? "disabled" : ""} data-id="${produto.id}">Adicionar ao carrinho</button>
+      `;
+      produtosContainer.appendChild(div);
+    });
+  }
+
+  // Carrinho
+  const carrinho = [];
+  const cartContainer = document.getElementById("cart");
+  const cartList = document.getElementById("cart-list");
+  const cartTotal = document.getElementById("cart-total");
+  const checkoutBtn = document.getElementById("checkout-btn");
+  const cartCloseBtn = document.getElementById("cart-close");
+  const openCartBtn = document.getElementById("open-cart-btn");
+
+  function atualizarCarrinho() {
+    cartList.innerHTML = "";
+    if(carrinho.length === 0){
+      cartList.innerHTML = "<p>Seu carrinho está vazio.</p>";
+      cartTotal.textContent = "";
+      checkoutBtn.style.display = "none";
+      return;
+    }
+    checkoutBtn.style.display = "block";
+    let total = 0;
+    carrinho.forEach(item => {
+      const produto = produtos.find(p => p.id === item.id);
+      total += produto.preco * item.quantidade;
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "cart-item";
+      itemDiv.innerHTML = `
+        <span>${produto.nome} x ${item.quantidade}</span>
+        <button data-id="${produto.id}" aria-label="Remover ${produto.nome} do carrinho">×</button>
+      `;
+      cartList.appendChild(itemDiv);
+    });
+    cartTotal.textContent = "Total: " + formatarPreco(total);
+  }
+
+  function adicionarAoCarrinho(id) {
+    const produto = produtos.find(p => p.id === id);
+    if(!produto || produto.estoque === 0) return;
+    const item = carrinho.find(i => i.id === id);
+    if(item){
+      if(item.quantidade < produto.estoque){
+        item.quantidade++;
+      } else {
+        alert("Quantidade máxima disponível atingida.");
+      }
+    } else {
+      carrinho.push({ id, quantidade: 1 });
+    }
+    atualizarCarrinho();
+  }
+
+  // Eventos para botões adicionar
+  produtosContainer.addEventListener("click", e => {
+    if(e.target.tagName === "BUTTON"){
+      const id = parseInt(e.target.getAttribute("data-id"));
+      adicionarAoCarrinho(id);
+    }
+  });
+
+  // Eventos para remover do carrinho
+  cartList.addEventListener("click", e => {
+    if(e.target.tagName === "BUTTON"){
+      const id = parseInt(e.target.getAttribute("data-id"));
+      const index = carrinho.findIndex(i => i.id === id);
+      if(index !== -1){
+        carrinho.splice(index,1);
+        atualizarCarrinho();
+      }
+    }
+  });
+
+  // Abrir e fechar carrinho
+  openCartBtn.addEventListener("click", () => {
+    cartContainer.style.display = "flex";
+    openCartBtn.style.display = "none";
+    cartCloseBtn.focus();
+  });
+  cartCloseBtn.addEventListener("click", () => {
+    cartContainer.style.display = "none";
+    openCartBtn.style.display = "block";
+    openCartBtn.focus();
+  });
+  cartCloseBtn.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" || e.key === " "){
+      cartContainer.style.display = "none";
+      openCartBtn.style.display = "block";
+      openCartBtn.focus();
+    }
+  });
+
+  checkoutBtn.addEventListener("click", () => {
+    alert("Finalizando compra! (Aqui você pode integrar o pagamento)");
+  });
+
+  gerarProdutos();
+  atualizarCarrinho();
+
+  // Countdown urgência - 1h a partir da carga da página
+  const countdownElement = document.getElementById("countdown");
+  let deadline = new Date(Date.now() + 60 * 60 * 1000); // 1 hora depois
+
+  function atualizarCountdown(){
+    const now = new Date();
+    let diff = deadline - now;
+    if(diff <= 0){
+      countdownElement.textContent = "00:00:00";
+      clearInterval(timer);
+      return;
+    }
+    let h = Math.floor(diff / (1000 * 60 * 60));
+    let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let s = Math.floor((diff % (1000 * 60)) / 1000);
+    countdownElement.textContent = 
+      (h < 10 ? "0" + h : h) + ":" +
+      (m < 10 ? "0" + m : m) + ":" +
+      (s < 10 ? "0" + s : s);
+  }
+
+  let timer = setInterval(atualizarCountdown, 1000);
+  atualizarCountdown();
+
+  // Quiz abrangente - perguntas sobre categorias variadas
+  const quizData = [
+    {
+      pergunta: "Qual tipo de produto você procura hoje?",
+      opcoes: ["Maquiagem", "Cuidado com a pele", "Perfumaria", "Cuidados para cabelo", "Acessórios", "Outros"]
+    },
+    {
+      pergunta: "Qual faixa de preço você prefere?",
+      opcoes: ["Até R$30", "R$30 - R$70", "Acima de R$70", "Não me importo com preço"]
+    },
+    {
+      pergunta: "Você prefere comprar produtos de marcas famosas ou achadinhos de lojas menores?",
+      opcoes: ["Marcas famosas", "Achadinhos exclusivos", "Indiferente"]
+    },
+    {
+      pergunta: "Com que frequência você compra produtos de beleza?",
+      opcoes: ["Semanalmente", "Mensalmente", "Raramente", "Nunca comprei antes"]
+    },
+    {
+      pergunta: "Qual a sua principal preocupação ao escolher um produto?",
+      opcoes: ["Qualidade", "Preço", "Indicações de amigos", "Ingredientes naturais", "Promoções"]
+    }
+  ];
+
+  const quizContainer = document.getElementById("quiz");
+
+  function criarQuiz() {
+    let html = `<h2>Descubra seus Achadinhos!</h2>`;
+    quizData.forEach((q, i) => {
+      html += `<div class="quiz-question">
+          <p>${i+1}. ${q.pergunta}</p>
+          <div class="quiz-options">`;
+      q.opcoes.forEach((opt, idx) => {
+        html += `<label><input type="radio" name="q${i}" value="${opt}" /> ${opt}</label>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `<button id="btn-submit-quiz">Ver sugestões</button>
+      <div id="quiz-result" role="alert" aria-live="polite"></div>`;
+    quizContainer.innerHTML = html;
+
+    document.getElementById("btn-submit-quiz").addEventListener("click", () => {
+      const respostas = [];
+      let tudoRespondido = true;
+      for(let i=0; i<quizData.length; i++){
+        const op = document.querySelector(`input[name="q${i}"]:checked`);
+        if(!op){
+          tudoRespondido = false;
+          break;
+        }
+        respostas.push(op.value);
+      }
+      const resultado = document.getElementById("quiz-result");
+      if(!tudoRespondido){
+        resultado.textContent = "Por favor, responda todas as perguntas.";
+        return;
+      }
+      // Aqui pode implementar lógica para recomendar produtos com base nas respostas
+      resultado.textContent = "Obrigada por participar! Explore nossos produtos para encontrar seus achadinhos ideais 💖";
+    });
+  }
+
+  criarQuiz();
+
+  // Formulário contato - aviso simples
+  const formContato = document.getElementById("form-contato");
+  formContato.addEventListener("submit", e => {
+    e.preventDefault();
+    alert("Obrigado pelo contato! Responderemos em breve.");
+    formContato.reset();
+  });
+
+  // Pop-up cupom (opcional)
+  const popupCupom = document.createElement("div");
+  popupCupom.id = "popup-cupom";
+  popupCupom.textContent = "Use o cupom BELEZA10 e ganhe 10% OFF!";
+  document.body.appendChild(popupCupom);
+
+  popupCupom.style.display = "block";
+
+  popupCupom.addEventListener("click", () => {
+    popupCupom.style.display = "none";
+    alert("Cupom copiado: BELEZA10");
+    navigator.clipboard.writeText("BELEZA10");
+  });
+
+  // Fecha pop-up após 12s
+  setTimeout(() => {
+    popupCupom.style.display = "none";
+  }, 12000);
+</script>
+
+</body>
+</html>
