@@ -371,83 +371,391 @@
   #cart {
     display: none;
     position: fixed;
-    top: 10vh;
-    right: 10px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.25);
-    width: 300px;
-    max-height: 70vh;
-    overflow-y: auto;
-    padding: 1rem;
+    top: 8vh;
+    right: 15px;
+    background: linear-gradient(145deg, #ffffff, #f8f0f5);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(123,77,124,0.2);
+    width: 350px;
+    max-height: 75vh;
+    overflow: hidden;
     flex-direction: column;
     z-index: 1100;
+    border: 1px solid rgba(169,127,174,0.2);
+    backdrop-filter: blur(10px);
+    animation: slideInCart 0.3s ease-out;
   }
-  #cart-close {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
+  
+  @keyframes slideInCart {
+    from { 
+      opacity: 0; 
+      transform: translateX(100%) scale(0.9); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0) scale(1); 
+    }
+  }
+  
+  #cart-header {
+    background: linear-gradient(135deg, #a97fae, #d4b4ca);
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #cart-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  #cart-title {
+    color: white;
+    font-size: 1.3rem;
     font-weight: 700;
-    align-self: flex-end;
-    cursor: pointer;
-    color: #7b4d7c;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
+  
+  #cart-title::before {
+    content: '🛍️';
+    font-size: 1.2rem;
+  }
+  
+  #cart-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  #cart-close:hover {
+    background: rgba(255,255,255,0.3);
+    transform: rotate(90deg);
+  }
+  
+  #cart-content {
+    padding: 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
   #cart-list {
     flex: 1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     outline: none;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
   }
+  
+  #cart-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #cart-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  #cart-list::-webkit-scrollbar-thumb {
+    background: #a97fae;
+    border-radius: 3px;
+  }
+  
   .cart-item {
-    margin-bottom: 0.6rem;
+    background: rgba(248,240,245,0.7);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(169,127,174,0.1);
+    position: relative;
+    overflow: hidden;
   }
+  
+  .cart-item::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(169,127,174,0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .cart-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(123,77,124,0.15);
+    border-color: rgba(169,127,174,0.3);
+  }
+  
+  .cart-item:hover::before {
+    left: 100%;
+  }
+  
+  .cart-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .cart-item-name {
+    font-weight: 600;
+    color: #633f54;
+    font-size: 0.95rem;
+  }
+  
+  .cart-item-price {
+    color: #a97fae;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  
   .cart-item button {
-    background: #d491bc;
+    background: linear-gradient(135deg, #d491bc, #b871a8);
     border: none;
     color: white;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 700;
-    padding: 0 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(212,145,188,0.3);
   }
+  
+  .cart-item button:hover {
+    background: linear-gradient(135deg, #b871a8, #7b4d7c);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(212,145,188,0.4);
+  }
+  
+  .cart-empty {
+    text-align: center;
+    color: #9c7b8a;
+    font-style: italic;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .cart-empty::before {
+    content: '🛒';
+    font-size: 3rem;
+    opacity: 0.5;
+  }
+  
+  #cart-footer {
+    border-top: 2px solid rgba(169,127,174,0.1);
+    padding-top: 1.2rem;
+  }
+  
   #cart-total {
+    background: linear-gradient(135deg, #f8f0f5, #f3e7e9);
+    padding: 1rem;
+    border-radius: 12px;
     font-weight: 700;
     color: #633f54;
     margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    border: 1px solid rgba(169,127,174,0.2);
+    position: relative;
+    overflow: hidden;
   }
+  
+  #cart-total::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 1s ease;
+  }
+  
+  #cart-total:hover::before {
+    left: 100%;
+  }
+  
   #checkout-btn {
-    background-color: #a97fae;
+    background: linear-gradient(135deg, #a97fae, #7b4d7c);
     border: none;
     color: white;
     font-weight: 700;
-    padding: 0.7rem;
+    padding: 1rem;
     width: 100%;
-    border-radius: 7px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(169,127,174,0.3);
+    position: relative;
+    overflow: hidden;
   }
+  
+  #checkout-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    transform: translate(-50%, -50%);
+  }
+  
   #checkout-btn:hover {
-    background-color: #7b4d7c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(169,127,174,0.4);
   }
+  
+  #checkout-btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  #checkout-btn:disabled {
+    background: linear-gradient(135deg, #d9c7d2, #c4b0c0);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
   #open-cart-btn {
     position: fixed;
     bottom: 30px;
     right: 20px;
-    background-color: #a97fae;
+    background: linear-gradient(135deg, #a97fae, #7b4d7c);
     border: none;
-    width: 56px;
-    height: 56px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     font-size: 28px;
     color: white;
-    box-shadow: 0 6px 14px #7b4d7caa;
+    box-shadow: 0 8px 25px rgba(123,77,124,0.4);
     cursor: pointer;
     z-index: 1001;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
   }
+  
+  #open-cart-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    transform: translate(-50%, -50%);
+  }
+  
   #open-cart-btn:hover {
-    background-color: #7b4d7c;
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 12px 35px rgba(123,77,124,0.5);
+  }
+  
+  #open-cart-btn:hover::before {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(255,71,87,0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .cart-badge.pulse {
+    animation: badgePulse 0.6s ease-in-out;
+  }
+  
+  @keyframes badgePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); background: #ff6b7a; }
+    100% { transform: scale(1); }
+  }
+
+  /* Notificação de item adicionado */
+  .cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #a97fae, #7b4d7c);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(123,77,124,0.3);
+    z-index: 1200;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  
+  .cart-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .cart-notification::before {
+    content: '✅';
+    font-size: 1.2rem;
   }
 
   /* WhatsApp fixo */
@@ -560,12 +868,22 @@
 
 <!-- Carrinho -->
 <div id="cart" role="dialog" aria-modal="true" aria-label="Carrinho de compras">
-  <button id="cart-close" aria-label="Fechar carrinho">&times;</button>
-  <div id="cart-list" tabindex="0"></div>
-  <div id="cart-total">Total: R$0,00</div>
-  <button id="checkout-btn">Finalizar Compra</button>
+  <div id="cart-header">
+    <h3 id="cart-title">Meu Carrinho</h3>
+    <button id="cart-close" aria-label="Fechar carrinho">&times;</button>
+  </div>
+  <div id="cart-content">
+    <div id="cart-list" tabindex="0"></div>
+    <div id="cart-footer">
+      <div id="cart-total">Total: R$0,00</div>
+      <button id="checkout-btn">Finalizar Compra</button>
+    </div>
+  </div>
 </div>
-<button id="open-cart-btn" aria-label="Abrir carrinho de compras">🛒</button>
+<button id="open-cart-btn" aria-label="Abrir carrinho de compras">
+  🛒
+  <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+</button>
 
 <!-- WhatsApp fixo -->
 <a href="https://wa.me/5567996524559" target="_blank" rel="noopener" aria-label="WhatsApp DreamLook" class="whatsapp-fixo" title="Fale conosco no WhatsApp">
@@ -846,34 +1164,79 @@
   const cartList = document.getElementById('cart-list');
   const cartTotal = document.getElementById('cart-total');
   const checkoutBtn = document.getElementById('checkout-btn');
+  const cartBadge = document.getElementById('cart-badge');
 
   let carrinho = [];
 
   function atualizarCarrinho() {
     cartList.innerHTML = '';
     let total = 0;
-    carrinho.forEach((item, idx) => {
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.textContent = `${item.nome} - R$99,99`;
-      const btnRemove = document.createElement('button');
-      btnRemove.textContent = 'X';
-      btnRemove.setAttribute('aria-label', `Remover ${item.nome} do carrinho`);
-      btnRemove.addEventListener('click', () => {
-        carrinho.splice(idx,1);
-        atualizarCarrinho();
-      });
-      div.appendChild(btnRemove);
-      cartList.appendChild(div);
-      total += 99.99;
-    });
-    cartTotal.textContent = `Total: R$${total.toFixed(2)}`;
+    
+    // Atualizar badge
+    const oldCount = cartBadge.textContent;
+    if(carrinho.length > 0) {
+      cartBadge.textContent = carrinho.length;
+      cartBadge.style.display = 'flex';
+      
+      // Adicionar efeito de pulsar se aumentou o número
+      if(oldCount && parseInt(cartBadge.textContent) > parseInt(oldCount)) {
+        cartBadge.classList.add('pulse');
+        setTimeout(() => {
+          cartBadge.classList.remove('pulse');
+        }, 600);
+      }
+    } else {
+      cartBadge.style.display = 'none';
+    }
+    
     if(carrinho.length === 0) {
-      cartList.textContent = 'Seu carrinho está vazio.';
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'cart-empty';
+      emptyDiv.innerHTML = 'Seu carrinho está vazio.<br/>Adicione alguns produtos!';
+      cartList.appendChild(emptyDiv);
       checkoutBtn.disabled = true;
     } else {
+      carrinho.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        
+        const itemInfo = document.createElement('div');
+        itemInfo.className = 'cart-item-info';
+        
+        const itemName = document.createElement('div');
+        itemName.className = 'cart-item-name';
+        itemName.textContent = item.nome;
+        
+        const itemPrice = document.createElement('div');
+        itemPrice.className = 'cart-item-price';
+        itemPrice.textContent = 'R$ 99,99';
+        
+        itemInfo.appendChild(itemName);
+        itemInfo.appendChild(itemPrice);
+        
+        const btnRemove = document.createElement('button');
+        btnRemove.innerHTML = '🗑️';
+        btnRemove.setAttribute('aria-label', `Remover ${item.nome} do carrinho`);
+        btnRemove.setAttribute('title', 'Remover item');
+        btnRemove.addEventListener('click', () => {
+          // Animação de remoção
+          div.style.transform = 'translateX(100%)';
+          div.style.opacity = '0';
+          setTimeout(() => {
+            carrinho.splice(idx, 1);
+            atualizarCarrinho();
+          }, 300);
+        });
+        
+        div.appendChild(itemInfo);
+        div.appendChild(btnRemove);
+        cartList.appendChild(div);
+        total += 99.99;
+      });
       checkoutBtn.disabled = false;
     }
+    
+    cartTotal.innerHTML = `<strong>Total: R$ ${total.toFixed(2).replace('.', ',')}</strong>`;
   }
   atualizarCarrinho();
 
@@ -889,8 +1252,52 @@
   });
 
   checkoutBtn.addEventListener('click', () => {
-    alert("Checkout não implementado. Integre com seu sistema de pagamentos.");
+    if(carrinho.length > 0) {
+      // Simular processamento
+      checkoutBtn.textContent = 'Processando...';
+      checkoutBtn.disabled = true;
+      
+      setTimeout(() => {
+        mostrarNotificacao('Compra finalizada com sucesso! 🎉');
+        carrinho = [];
+        atualizarCarrinho();
+        cart.style.display = 'none';
+        cart.setAttribute('aria-hidden', 'true');
+        
+        checkoutBtn.textContent = 'Finalizar Compra';
+        checkoutBtn.disabled = false;
+      }, 2000);
+    }
   });
+
+  // Função para mostrar notificação elegante
+  function mostrarNotificacao(mensagem) {
+    // Remove notificação existente se houver
+    const existingNotification = document.querySelector('.cart-notification');
+    if(existingNotification) {
+      existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.textContent = mensagem;
+    document.body.appendChild(notification);
+    
+    // Mostrar com animação
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 100);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => {
+        if(notification.parentElement) {
+          notification.remove();
+        }
+      }, 400);
+    }, 3000);
+  }
 
   // Comprar produto na lista e quiz
   produtosContainer.addEventListener('click', e => {
@@ -898,7 +1305,7 @@
       const nomeProd = e.target.parentElement.querySelector('h3').textContent;
       carrinho.push({nome: nomeProd});
       atualizarCarrinho();
-      alert(`${nomeProd} adicionado ao carrinho!`);
+      mostrarNotificacao(`${nomeProd} adicionado ao carrinho!`);
     }
   });
   quizContainer.addEventListener('click', e => {
@@ -906,147 +1313,10 @@
       const nomeProd = e.target.parentElement.querySelector('h3').textContent;
       carrinho.push({nome: nomeProd});
       atualizarCarrinho();
-      alert(`${nomeProd} adicionado ao carrinho!`);
+      mostrarNotificacao(`${nomeProd} adicionado ao carrinho!`);
     }
   });
 
 </script>
-</body>
-</html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DreamLook</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: linear-gradient(to bottom, #fbeff5, #f8f2e9);
-      margin: 0;
-      padding: 1rem;
-    }
-    #look-preview {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-    #look-preview img {
-      max-width: 150px;
-    }
-    .overlay-img {
-      position: absolute;
-      pointer-events: none;
-      display: none;
-    }
-    #items-gallery {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-    }
-    .item-card {
-      flex: 0 0 auto;
-      cursor: pointer;
-      text-align: center;
-    }
-    .item-card img {
-      width: 80px;
-      height: auto;
-      border-radius: 8px;
-    }
-  </style>
-</head>
-<body>
-  <h1>DreamLook - Monte seu look</h1>
-
-  <div>
-    <label for="upload-photo">Envie sua foto:</label>
-    <input type="file" id="upload-photo" accept="image/*" />
-    <button id="camera-btn">Tirar foto</button>
-    <video id="camera-stream" width="150" autoplay playsinline style="display:none;"></video>
-    <canvas id="photo-canvas" width="150" height="200" style="display:none;"></canvas>
-  </div>
-
-  <div id="look-preview">
-    <img id="user-photo" src="https://via.placeholder.com/150x200?text=Sua+foto" alt="Sua foto" />
-    <img id="overlay-roupa" class="overlay-img" style="top: 0; left: 0; width: 150px;" />
-    <img id="overlay-sapato" class="overlay-img" style="top: 130px; left: 30px; width: 90px;" />
-    <img id="overlay-bolsa" class="overlay-img" style="top: 80px; left: 100px; width: 50px;" />
-  </div>
-
-  <div>
-    <button onclick="renderItems('roupas')">Roupas</button>
-    <button onclick="renderItems('sapatos')">Sapatos</button>
-    <button onclick="renderItems('bolsas')">Bolsas</button>
-  </div>
-
-  <div id="items-gallery"></div>
-
-  <script>
-    const uploadInput = document.getElementById('upload-photo');
-    const userPhoto = document.getElementById('user-photo');
-    const cameraBtn = document.getElementById('camera-btn');
-    const cameraStream = document.getElementById('camera-stream');
-    const photoCanvas = document.getElementById('photo-canvas');
-
-    uploadInput.addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = evt => {
-          userPhoto.src = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    cameraBtn.addEventListener('click', async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        cameraStream.srcObject = stream;
-        cameraStream.style.display = 'block';
-        setTimeout(() => {
-          const ctx = photoCanvas.getContext('2d');
-          ctx.drawImage(cameraStream, 0, 0, photoCanvas.width, photoCanvas.height);
-          const imgData = photoCanvas.toDataURL('image/png');
-          userPhoto.src = imgData;
-          cameraStream.srcObject.getTracks().forEach(track => track.stop());
-          cameraStream.style.display = 'none';
-        }, 3000);
-      } catch (e) {
-        alert('Não foi possível acessar a câmera.');
-      }
-    });
-
-    const looksData = {
-      roupas: [
-        { nome: 'Vestido Vermelho', img: 'https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=150&q=80' },
-        { nome: 'Blusa Branca', img: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=150&q=80' }
-      ],
-      sapatos: [
-        { nome: 'Tênis Esportivo', img: 'https://images.unsplash.com/photo-1519741495237-494bf519de2d?auto=format&fit=crop&w=150&q=80' },
-        { nome: 'Sandália Nude', img: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=150&q=80' }
-      ],
-      bolsas: [
-        { nome: 'Bolsa Pequena', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=150&q=80' },
-        { nome: 'Bolsa Tote', img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=150&q=80' }
-      ]
-    };
-
-    function renderItems(cat) {
-      const gallery = document.getElementById('items-gallery');
-      gallery.innerHTML = '';
-      looksData[cat].forEach((item, idx) => {
-        const card = document.createElement('div');
-        card.className = 'item-card';
-        card.innerHTML = `<img src="${item.img}" alt="${item.nome}" /><p>${item.nome}</p>`;
-        card.onclick = () => {
-          const overlay = document.getElementById(`overlay-${cat.slice(0, -1)}`);
-          overlay.src = item.img;
-          overlay.style.display = 'block';
-        };
-        gallery.appendChild(card);
-      });
-    }
-  </script>
 </body>
 </html>
