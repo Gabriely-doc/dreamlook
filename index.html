@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Achadinhos Beauty</title>
+  <style>
+    :root {
+      --rosa-principal: #ff69b4;
+      --rosa-claro: #ffc0cb;
+      --rosa-escuro: #e91e63;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #fff0f5;
+      color: #333;
+    }
+    header {
+      background-color: var(--rosa-principal);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    nav {
+      background-color: var(--rosa-claro);
+      padding: 15px;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .produtos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 30px;
+    }
+    .produto {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin: 15px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .produto:hover {
+      transform: scale(1.03);
+    }
+    .produto img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .produto h3 {
+      margin: 10px 0;
+      color: var(--rosa-escuro);
+    }
+    .produto p {
+      margin-bottom: 10px;
+    }
+    .produto button {
+      background-color: var(--rosa-escuro);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .produto button:hover {
+      background-color: #c2185b;
+    }
+    footer {
+      background-color: var(--rosa-principal);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    @media (max-width: 768px) {
+      .produtos {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Achadinhos Beauty</h1>
+    <p>Beleza e fofura direto da Shopee para você!</p>
+  </header>
+
+  <nav>
+    <a href="#">Início</a>
+    <a href="#produtos">Produtos</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#contato">Contato</a>
+    <a href="#rastreio">Rastreio</a>
+  </nav>
+
+  <section id="produtos" class="produtos">
+    <div class="produto">
+      <img src="https://images.unsplash.com/photo-1589987607627-7236591fa4d5?fit=crop&w=500&q=80" alt="Esponja de maquiagem" />
+      <h3>Esponja Mágica</h3>
+      <p>R$ 14,90</p>
+      <button onclick="adicionarCarrinho('Esponja Mágica', 14.90)">Comprar</button>
+    </div>
+    <div class="produto">
+      <img src="https://images.unsplash.com/photo-1608219835923-582e84e5f4cf?fit=crop&w=500&q=80" alt="Organizador rosa" />
+      <h3>Organizador Rosa</h3>
+      <p>R$ 29,90</p>
+      <button onclick="adicionarCarrinho('Organizador Rosa', 29.90)">Comprar</button>
+    </div>
+    <div class="produto">
+      <img src="https://images.unsplash.com/photo-1596464716124-b1bdbdb2395e?fit=crop&w=500&q=80" alt="Mini espelho led" />
+      <h3>Mini Espelho LED</h3>
+      <p>R$ 39,90</p>
+      <button onclick="adicionarCarrinho('Mini Espelho LED', 39.90)">Comprar</button>
+    </div>
+  </section>
+
+  <section id="sobre" style="padding: 30px; text-align: center;">
+    <h2>Sobre a loja</h2>
+    <p>
+      A Achadinhos Beauty nasceu com a missão de trazer os produtos mais fofos e funcionais de beleza diretamente para você,
+      com preço justo e entrega garantida.
+    </p>
+  </section>
+
+  <section id="contato" style="padding: 30px; text-align: center;">
+    <h2>Fale Conosco</h2>
+    <p>Email: atendimento@achadinhosbeauty.com.br</p>
+    <p>WhatsApp: (67) 99652-4559</p>
+  </section>
+
+  <section id="rastreio" style="padding: 30px; text-align: center;">
+    <h2>Rastreie seu pedido</h2>
+    <p>
+      Digite o código de rastreio recebido por email em apps como
+      <a href="https://www.muambator.com.br/" target="_blank">Muambator</a> ou
+      <a href="https://rastreamento.correios.com.br/" target="_blank">Correios</a>.
+    </p>
+  </section>
+
+  <footer>
+    © 2025 Achadinhos Beauty • Todos os direitos reservados
+  </footer>
+
+  <script>
+    let carrinho = [];
+
+    function adicionarCarrinho(produto, preco) {
+      carrinho.push({ produto, preco });
+      alert(`${produto} adicionado ao carrinho! Total: R$ ${somaCarrinho().toFixed(2)}`);
+    }
+
+    function somaCarrinho() {
+      return carrinho.reduce((total, item) => total + item.preco, 0);
+    }
+  </script>
+</body>
+</html>
+
