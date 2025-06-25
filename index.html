@@ -913,3 +913,140 @@
 </script>
 </body>
 </html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DreamLook</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #fbeff5, #f8f2e9);
+      margin: 0;
+      padding: 1rem;
+    }
+    #look-preview {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    #look-preview img {
+      max-width: 150px;
+    }
+    .overlay-img {
+      position: absolute;
+      pointer-events: none;
+      display: none;
+    }
+    #items-gallery {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+    }
+    .item-card {
+      flex: 0 0 auto;
+      cursor: pointer;
+      text-align: center;
+    }
+    .item-card img {
+      width: 80px;
+      height: auto;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>DreamLook - Monte seu look</h1>
+
+  <div>
+    <label for="upload-photo">Envie sua foto:</label>
+    <input type="file" id="upload-photo" accept="image/*" />
+    <button id="camera-btn">Tirar foto</button>
+    <video id="camera-stream" width="150" autoplay playsinline style="display:none;"></video>
+    <canvas id="photo-canvas" width="150" height="200" style="display:none;"></canvas>
+  </div>
+
+  <div id="look-preview">
+    <img id="user-photo" src="https://via.placeholder.com/150x200?text=Sua+foto" alt="Sua foto" />
+    <img id="overlay-roupa" class="overlay-img" style="top: 0; left: 0; width: 150px;" />
+    <img id="overlay-sapato" class="overlay-img" style="top: 130px; left: 30px; width: 90px;" />
+    <img id="overlay-bolsa" class="overlay-img" style="top: 80px; left: 100px; width: 50px;" />
+  </div>
+
+  <div>
+    <button onclick="renderItems('roupas')">Roupas</button>
+    <button onclick="renderItems('sapatos')">Sapatos</button>
+    <button onclick="renderItems('bolsas')">Bolsas</button>
+  </div>
+
+  <div id="items-gallery"></div>
+
+  <script>
+    const uploadInput = document.getElementById('upload-photo');
+    const userPhoto = document.getElementById('user-photo');
+    const cameraBtn = document.getElementById('camera-btn');
+    const cameraStream = document.getElementById('camera-stream');
+    const photoCanvas = document.getElementById('photo-canvas');
+
+    uploadInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = evt => {
+          userPhoto.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    cameraBtn.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        cameraStream.srcObject = stream;
+        cameraStream.style.display = 'block';
+        setTimeout(() => {
+          const ctx = photoCanvas.getContext('2d');
+          ctx.drawImage(cameraStream, 0, 0, photoCanvas.width, photoCanvas.height);
+          const imgData = photoCanvas.toDataURL('image/png');
+          userPhoto.src = imgData;
+          cameraStream.srcObject.getTracks().forEach(track => track.stop());
+          cameraStream.style.display = 'none';
+        }, 3000);
+      } catch (e) {
+        alert('Não foi possível acessar a câmera.');
+      }
+    });
+
+    const looksData = {
+      roupas: [
+        { nome: 'Vestido Vermelho', img: 'https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=150&q=80' },
+        { nome: 'Blusa Branca', img: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=150&q=80' }
+      ],
+      sapatos: [
+        { nome: 'Tênis Esportivo', img: 'https://images.unsplash.com/photo-1519741495237-494bf519de2d?auto=format&fit=crop&w=150&q=80' },
+        { nome: 'Sandália Nude', img: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=150&q=80' }
+      ],
+      bolsas: [
+        { nome: 'Bolsa Pequena', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=150&q=80' },
+        { nome: 'Bolsa Tote', img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=150&q=80' }
+      ]
+    };
+
+    function renderItems(cat) {
+      const gallery = document.getElementById('items-gallery');
+      gallery.innerHTML = '';
+      looksData[cat].forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `<img src="${item.img}" alt="${item.nome}" /><p>${item.nome}</p>`;
+        card.onclick = () => {
+          const overlay = document.getElementById(`overlay-${cat.slice(0, -1)}`);
+          overlay.src = item.img;
+          overlay.style.display = 'block';
+        };
+        gallery.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
