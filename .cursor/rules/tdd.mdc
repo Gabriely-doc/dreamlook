@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+IMPLEMENTAR [TASK] com TDD rigoroso:
+
+🔴 FASE RED: Criar testes que falham
+🟢 FASE GREEN: Código mínimo para passar
+🔵 FASE BLUE: Refatorar mantendo testes verdes
+
+⚠️ REGRAS CRÍTICAS:
+
+- NUNCA fechar tarefa sem testes passando
+- SEMPRE verificar compilação primeiro
+- SEMPRE corrigir namespaces/referências
+- ITERAÇÃO até sucesso 100%

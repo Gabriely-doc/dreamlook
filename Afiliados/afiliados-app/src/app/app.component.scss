@@ -1,0 +1,224 @@
+// Navigation Styles
+.main-nav {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+}
+
+.nav-logo h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.supabase-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: block;
+  animation: pulse 2s infinite;
+}
+
+// Status Colors
+.status-success {
+  .status-indicator {
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  }
+}
+
+.status-error {
+  .status-indicator {
+    background: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  }
+}
+
+.status-warning {
+  .status-indicator {
+    background: #f59e0b;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+  }
+}
+
+.status-info {
+  .status-indicator {
+    background: #3b82f6;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-logout {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+// Main Content
+.main-content {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 100%);
+}
+
+// PWA Banner
+.pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1001;
+  animation: slideUp 0.3s ease-out;
+}
+
+.pwa-banner p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.pwa-banner button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.pwa-banner button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .nav-logo h2 {
+    font-size: 1.25rem;
+  }
+  
+  .nav-center {
+    display: none; // Ocultar status em mobile para economizar espaço
+  }
+  
+  .nav-links {
+    gap: 1rem;
+  }
+  
+  .nav-links a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+  }
+  
+  .pwa-banner {
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    flex-direction: column;
+    text-align: center;
+  }
+}

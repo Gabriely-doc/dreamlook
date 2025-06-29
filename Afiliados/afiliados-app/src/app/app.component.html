@@ -1,0 +1,34 @@
+<!-- Navigation Header -->
+<nav class="main-nav">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <h2>🛍️ Deals Hub</h2>
+    </div>
+    <div class="nav-center">
+      <div class="supabase-status" [class]="getSupabaseStatusClass()">
+        <span class="status-indicator"></span>
+        {{ getSupabaseStatusText() }}
+      </div>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/feed" routerLinkActive="active">Feed</a>
+      <a *ngIf="!isAuthenticated" routerLink="/auth" routerLinkActive="active">Login</a>
+      <a *ngIf="isAuthenticated" routerLink="/admin" routerLinkActive="active">Admin</a>
+      <button *ngIf="isAuthenticated" class="btn-logout" (click)="signOut()">
+        Sair ({{ currentUser?.email }})
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+  <router-outlet />
+</main>
+
+<!-- PWA Install Banner -->
+<div class="pwa-banner" *ngIf="showInstallBanner">
+  <p>📱 Instale nosso app para uma melhor experiência!</p>
+  <button (click)="installPWA()">Instalar</button>
+  <button (click)="dismissBanner()">Dispensar</button>
+</div>
