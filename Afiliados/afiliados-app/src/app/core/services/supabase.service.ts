@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from, map, catchError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SupabaseService {
-  private supabase: SupabaseClient;
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
   private sessionSubject = new BehaviorSubject<Session | null>(null);
+  private connectionStatusSubject = new BehaviorSubject<'connected' | 'disconnected' | 'checking'>('checking');
+  public connectionStatus$ = this.connectionStatusSubject.asObservable();
+
+  public supabase: SupabaseClient;
 
   constructor() {
     // Verificar se as configurações do Supabase estão presentes
@@ -43,7 +45,6 @@ export class SupabaseService {
     // Monitorar mudanças de autenticação
     this.supabase.auth.onAuthStateChange((event, session) => {
       this.sessionSubject.next(session);
-      this.currentUserSubject.next(session?.user || null);
       
       if (environment.debug.enableConsoleLog) {
         console.log('🔐 Auth state changed:', event, session?.user?.email || 'No user');
@@ -57,20 +58,12 @@ export class SupabaseService {
   }
 
   // Observables para estado de autenticação
-  get currentUser$(): Observable<User | null> {
-    return this.currentUserSubject.asObservable();
-  }
-
   get session$(): Observable<Session | null> {
     return this.sessionSubject.asObservable();
   }
 
-  get currentUser(): User | null {
-    return this.currentUserSubject.value;
-  }
-
   get isAuthenticated(): boolean {
-    return !!this.currentUserSubject.value;
+    return !!this.sessionSubject.value;
   }
 
   // Testar conexão com o Supabase
@@ -166,11 +159,57 @@ export class SupabaseService {
     };
   }
 
-  // Métodos para produtos
-  getProducts(page: number = 0, limit: number = 10): Observable<any[]> {
-    return from(this.fetchProducts(page, limit));
+  // Método para buscar produtos com filtro opcional por status
+  getProducts(status?: string): Observable<any[]> {
+    let query = this.supabase
+      .from('products')
+      .select(`
+        *,
+        niches!inner(name, slug)
+      `)
+      .eq('niches.slug', environment.niches.current)
+      .order('created_at', { ascending: false });
+
+    if (status) {
+      query = query.eq('status', status);
+    } else {
+      // Se não especificar status, buscar apenas aprovados (para feed público)
+      query = query.eq('status', 'approved');
+    }
+
+    return from(query).pipe(
+      map((response: any) => {
+        if (response.error) {
+          throw response.error;
+        }
+        return response.data || [];
+      }),
+      catchError((error) => {
+        console.error('Erro ao buscar produtos:', error);
+        return of([]);
+      })
+    );
   }
 
+  // Método para atualizar status de um produto (moderação)
+  async updateProductStatus(productId: string, status: 'approved' | 'rejected' | 'pending'): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('products')
+        .update({ 
+          status: status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', productId);
+
+      return { data, error };
+    } catch (error) {
+      console.error('Erro ao atualizar status do produto:', error);
+      return { data: null, error };
+    }
+  }
+
+  // Métodos para produtos
   getProductsByNiche(niche: string, page: number = 0, limit: number = 10): Observable<any[]> {
     return from(this.fetchProductsByNiche(niche, page, limit));
   }

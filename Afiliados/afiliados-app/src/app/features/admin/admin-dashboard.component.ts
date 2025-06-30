@@ -1,151 +1,139 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
-    <div class="admin-container">
-      <header class="admin-header">
-        <div class="security-badge">🔒 Rota Protegida - Apenas Admins</div>
-        <h1>👨‍💼 Painel Administrativo</h1>
-        <p>Gerencie produtos, usuários e métricas</p>
-      </header>
+    <div class="admin-dashboard">
+      <h2>Painel Administrativo</h2>
       
-      <div class="admin-grid">
+      <div class="admin-cards">
         <div class="admin-card">
-          <h3>📊 Métricas</h3>
-          <div class="metric">
-            <span class="metric-value">1,234</span>
-            <span class="metric-label">Usuários Ativos</span>
-          </div>
-          <div class="metric">
-            <span class="metric-value">567</span>
-            <span class="metric-label">Produtos</span>
-          </div>
+          <h3>📊 Estatísticas</h3>
+          <p>Visualizar métricas do aplicativo</p>
+          <button class="btn-primary" disabled>Em breve</button>
         </div>
         
         <div class="admin-card">
-          <h3>🛍️ Produtos Pendentes</h3>
-          <p>5 produtos aguardando aprovação</p>
-          <button class="btn-primary">Revisar Produtos</button>
+          <h3>✅ Moderação</h3>
+          <p>Aprovar ou rejeitar produtos pendentes</p>
+          <a routerLink="/admin/moderation" class="btn-primary">Acessar</a>
+        </div>
+        
+        <div class="admin-card">
+          <h3>➕ Produtos</h3>
+          <p>Adicionar novos produtos manualmente</p>
+          <button class="btn-primary" disabled>Em breve</button>
         </div>
         
         <div class="admin-card">
           <h3>👥 Usuários</h3>
-          <p>Gerencie usuários e permissões</p>
-          <button class="btn-secondary">Ver Usuários</button>
+          <p>Gerenciar usuários e permissões</p>
+          <button class="btn-primary" disabled>Em breve</button>
         </div>
-        
-        <div class="admin-card">
-          <h3>⚙️ Configurações</h3>
-          <p>Configurações do sistema</p>
-          <button class="btn-secondary">Configurar</button>
-        </div>
+      </div>
+      
+      <div class="admin-info">
+        <h3>🔒 Área Administrativa</h3>
+        <p>Você está logado como administrador. Use estas ferramentas com cuidado.</p>
       </div>
     </div>
   `,
   styles: [`
-    .admin-container {
+    .admin-dashboard {
+      padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
     }
-    
-    .admin-header {
+
+    h2 {
       text-align: center;
-      margin-bottom: 3rem;
+      color: #333;
+      margin-bottom: 30px;
     }
-    
-    .admin-header h1 {
-      color: #8b5cf6;
-      margin-bottom: 0.5rem;
-    }
-    
-    .admin-header p {
-      color: #6b7280;
-    }
-    
-    .security-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #059669, #10b981);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
-    }
-    
-    .admin-grid {
+
+    .admin-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
     }
-    
+
     .admin-card {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 2rem;
-      text-align: center;
-    }
-    
-    .admin-card h3 {
-      color: #374151;
-      margin-bottom: 1rem;
-    }
-    
-    .metric {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 1rem;
-    }
-    
-    .metric-value {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #8b5cf6;
-    }
-    
-    .metric-label {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #8b5cf6, #a855f7);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
       border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
       transition: transform 0.2s;
     }
-    
-    .btn-primary:hover {
+
+    .admin-card:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
-    
-    .btn-secondary {
-      background: #f3f4f6;
-      color: #374151;
-      border: 1px solid #d1d5db;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
+
+    .admin-card h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 18px;
+    }
+
+    .admin-card p {
+      color: #666;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
       cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.2s;
     }
-    
-    .btn-secondary:hover {
-      background: #e5e7eb;
-      transform: translateY(-1px);
+
+    .btn-primary:hover:not(:disabled) {
+      background: #0056b3;
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .admin-info {
+      background: #e3f2fd;
+      border: 1px solid #2196f3;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .admin-info h3 {
+      margin: 0 0 10px 0;
+      color: #1976d2;
+    }
+
+    .admin-info p {
+      margin: 0;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .admin-cards {
+        grid-template-columns: 1fr;
+      }
     }
   `]
 })
 export class AdminDashboardComponent {
+  
 } 

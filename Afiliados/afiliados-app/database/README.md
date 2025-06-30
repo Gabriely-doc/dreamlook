@@ -9,7 +9,7 @@ database/
 ├── 01_schema.sql       # Criação de tabelas, índices e triggers
 ├── 02_functions.sql    # Funções SQL para lógica de negócio
 ├── 03_rls_policies.sql # Políticas de Row Level Security
-├── 04_seed_data.sql    # Dados iniciais (roles, niches, exemplos)
+├── 04_niches_seed.sql   # Dados iniciais (roles, niches, exemplos)
 ├── 05_test_queries.sql # Queries de teste e verificação
 └── README.md          # Esta documentação
 ```
@@ -45,14 +45,38 @@ Execute os scripts **na ordem exata** listada abaixo:
 
 #### **4. Dados Iniciais**
 ```sql
--- Executar: 04_seed_data.sql
+-- Executar: 04_niches_seed.sql
 -- Popula roles, niches e dados de exemplo
 ```
 
-#### **5. Testes (Opcional)**
+#### **5. Roles Padrão**
+```sql
+-- Executar: 08_default_roles.sql
+-- Popula roles padrão com permissões configuradas
+```
+
+#### **6. Trigger de Usuários**
+```sql
+-- Executar: 07_user_profiles_trigger.sql
+-- Cria o trigger para sincronizar usuários entre auth.users e public.users
+```
+
+#### **7. Testes (Opcional)**
 ```sql
 -- Executar: 05_test_queries.sql
 -- Verifica se tudo está funcionando corretamente
+```
+
+#### **8. **beleza_produtos.sql** - Produtos de Beleza**
+```sql
+-- Executar: beleza_produtos.sql
+-- Popula dados de exemplo para o nicho de beleza
+```
+
+#### **9. **06_pending_products.sql** - Produtos Pendentes**
+```sql
+-- Executar: 06_pending_products.sql
+-- Popula dados de exemplo para produtos pendentes
 ```
 
 ## 📊 **Diagrama do Banco**

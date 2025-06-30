@@ -7,5 +7,9 @@ export const adminRoutes: Routes = [
     loadComponent: () => import('./admin-dashboard.component').then(m => m.AdminDashboardComponent),
     canActivate: [AdminGuard],
     canActivateChild: [AdminGuard]
+  },
+  {
+    path: 'moderation',
+    loadComponent: () => import('./product-moderation.component').then(m => m.ProductModerationComponent)
   }
 ]; 
