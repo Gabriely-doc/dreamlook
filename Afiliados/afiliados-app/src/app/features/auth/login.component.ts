@@ -293,9 +293,7 @@ export class LoginComponent {
       let result;
       
       if (this.isSignUp) {
-        result = await this.authService.signUpWithEmail(this.email, this.password, {
-          full_name: this.email.split('@')[0] // Nome temporário baseado no email
-        });
+        result = await this.authService.signUpWithEmail(this.email, this.password, this.email.split('@')[0]);
         
         if (result.success) {
           this.successMessage = 'Conta criada! Verifique seu email para confirmar.';

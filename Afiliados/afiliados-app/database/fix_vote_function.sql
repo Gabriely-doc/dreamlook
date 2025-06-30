@@ -30,6 +30,7 @@ DECLARE
     v_total_votes INTEGER;
     v_positive_votes INTEGER;
     v_negative_votes INTEGER;
+    v_action TEXT;
 BEGIN
     -- Validar se o produto existe e está ativo
     SELECT EXISTS(
@@ -71,10 +72,16 @@ BEGIN
         -- Se o voto já existe e é igual ao novo voto, remover (toggle)
         IF v_existing_vote.is_positive = p_is_positive THEN
             DELETE FROM user_votes WHERE id = v_existing_vote.id;
+            v_action := 'removed';
+            
+            -- Decrementar contador de votos do usuário
+            UPDATE users 
+            SET total_votes_cast = GREATEST(0, total_votes_cast - 1)
+            WHERE id = p_user_id;
             
             v_result := jsonb_build_object(
                 'success', true,
-                'action', 'removed',
+                'action', v_action,
                 'message', 'Voto removido com sucesso'
             );
         ELSE
@@ -84,9 +91,11 @@ BEGIN
                 updated_at = NOW()
             WHERE id = v_existing_vote.id;
             
+            v_action := 'updated';
+            
             v_result := jsonb_build_object(
                 'success', true,
-                'action', 'updated',
+                'action', v_action,
                 'message', 'Voto atualizado com sucesso'
             );
         END IF;
@@ -95,31 +104,37 @@ BEGIN
         INSERT INTO user_votes (user_id, product_id, is_positive)
         VALUES (p_user_id, p_product_id, p_is_positive);
         
-        -- Atualizar contador de votos do usuário (se coluna existir)
+        v_action := 'created';
+        
+        -- Atualizar contador de votos do usuário
         UPDATE users 
-        SET total_votes_cast = COALESCE(total_votes_cast, 0) + 1
+        SET total_votes_cast = total_votes_cast + 1
         WHERE id = p_user_id;
         
-        -- Dar recompensa por votar (se tabela existir)
+        -- Dar recompensa por votar (apenas para novos votos)
         INSERT INTO user_rewards (user_id, product_id, reward_type, points, description)
-        VALUES (p_user_id, p_product_id, 'vote_cast', 1, 'Voted on product')
-        ON CONFLICT DO NOTHING;
+        VALUES (p_user_id, p_product_id, 'vote_cast', 1, 'Voted on product');
         
         v_result := jsonb_build_object(
             'success', true,
-            'action', 'created',
+            'action', v_action,
             'message', 'Voto criado com sucesso'
         );
     END IF;
     
-    -- Recalcular contadores do produto
+    -- SEMPRE recalcular contadores do produto após qualquer mudança
     SELECT 
-        COUNT(*) as total,
-        COUNT(*) FILTER (WHERE is_positive = true) as positive,
-        COUNT(*) FILTER (WHERE is_positive = false) as negative
+        COALESCE(COUNT(*), 0) as total,
+        COALESCE(COUNT(*) FILTER (WHERE is_positive = true), 0) as positive,
+        COALESCE(COUNT(*) FILTER (WHERE is_positive = false), 0) as negative
     INTO v_total_votes, v_positive_votes, v_negative_votes
     FROM user_votes 
     WHERE product_id = p_product_id;
+    
+    -- Garantir que os valores nunca sejam negativos
+    v_total_votes := GREATEST(0, v_total_votes);
+    v_positive_votes := GREATEST(0, v_positive_votes);
+    v_negative_votes := GREATEST(0, v_negative_votes);
     
     -- Atualizar contadores na tabela products
     UPDATE products 
@@ -130,13 +145,8 @@ BEGIN
         updated_at = NOW()
     WHERE id = p_product_id;
 
-    -- Recalcular heat score (se função existir)
-    BEGIN
-        SELECT calculate_heat_score(p_product_id) INTO v_new_vote_score;
-    EXCEPTION
-        WHEN OTHERS THEN
-            v_new_vote_score := v_positive_votes - v_negative_votes;
-    END;
+    -- Recalcular heat score
+    SELECT calculate_heat_score(p_product_id) INTO v_new_vote_score;
     
     -- Adicionar informações do produto atualizado ao resultado
     v_result := v_result || jsonb_build_object(
@@ -146,13 +156,19 @@ BEGIN
             'positive', v_positive_votes,
             'negative', v_negative_votes,
             'heat_score', v_new_vote_score
-        )
+        ),
+        'user_action', v_action
     );
+    
+    -- Log para debug
+    RAISE NOTICE 'Vote processed: user=%, product=%, action=%, total_votes=%', 
+        p_user_id, p_product_id, v_action, v_total_votes;
     
     RETURN v_result;
     
 EXCEPTION
     WHEN OTHERS THEN
+        RAISE NOTICE 'Error in vote_product: %', SQLERRM;
         RETURN jsonb_build_object(
             'success', false,
             'error', 'database_error',
@@ -174,4 +190,66 @@ SELECT vote_product(
     '20000000-0000-0000-0000-000000000002'::uuid,
     '30000000-0000-0000-0000-000000000001'::uuid, 
     true
-) as test_result; 
+) as test_result;
+
+-- =====================================================
+-- FUNÇÃO PARA RECALCULAR TODOS OS CONTADORES
+-- =====================================================
+
+CREATE OR REPLACE FUNCTION recalculate_product_counters()
+RETURNS JSONB AS $$
+DECLARE
+    v_product_record RECORD;
+    v_total_updated INTEGER := 0;
+    v_errors INTEGER := 0;
+BEGIN
+    -- Recalcular contadores para todos os produtos
+    FOR v_product_record IN 
+        SELECT id FROM products WHERE is_active = true
+    LOOP
+        BEGIN
+            -- Recalcular votos
+            UPDATE products 
+            SET 
+                total_votes = (
+                    SELECT COALESCE(COUNT(*), 0) 
+                    FROM user_votes 
+                    WHERE product_id = v_product_record.id
+                ),
+                positive_votes = (
+                    SELECT COALESCE(COUNT(*), 0) 
+                    FROM user_votes 
+                    WHERE product_id = v_product_record.id AND is_positive = true
+                ),
+                negative_votes = (
+                    SELECT COALESCE(COUNT(*), 0) 
+                    FROM user_votes 
+                    WHERE product_id = v_product_record.id AND is_positive = false
+                ),
+                comment_count = (
+                    SELECT COALESCE(COUNT(*), 0) 
+                    FROM comments 
+                    WHERE product_id = v_product_record.id AND is_approved = true
+                )
+            WHERE id = v_product_record.id;
+            
+            -- Recalcular heat score
+            PERFORM calculate_heat_score(v_product_record.id);
+            
+            v_total_updated := v_total_updated + 1;
+            
+        EXCEPTION
+            WHEN OTHERS THEN
+                v_errors := v_errors + 1;
+                RAISE NOTICE 'Error updating product %: %', v_product_record.id, SQLERRM;
+        END;
+    END LOOP;
+    
+    RETURN jsonb_build_object(
+        'success', true,
+        'products_updated', v_total_updated,
+        'errors', v_errors,
+        'message', format('Recalculados contadores de %s produtos com %s erros', v_total_updated, v_errors)
+    );
+END;
+$$ LANGUAGE plpgsql; 

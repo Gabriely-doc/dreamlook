@@ -1,0 +1,13 @@
+// Test role checking
+const userRoles = ['super_admin'];
+const adminRoles = ['admin', 'super admin', 'superadmin', 'super_admin'];
+
+const hasAdminRole = userRoles.some((role) => {
+  const normalizedRole = role.toLowerCase().trim();
+  const normalizedAdminRoles = adminRoles.map(r => r.toLowerCase().trim());
+  console.log('Checking role:', normalizedRole);
+  console.log('Against admin roles:', normalizedAdminRoles);
+  return normalizedAdminRoles.includes(normalizedRole);
+});
+
+console.log('Result:', hasAdminRole); // Should be true 

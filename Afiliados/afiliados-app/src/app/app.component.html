@@ -14,6 +14,7 @@
       <a routerLink="/feed" routerLinkActive="active">Feed</a>
       <a *ngIf="!isAuthenticated" routerLink="/auth" routerLinkActive="active">Login</a>
       <a *ngIf="isAuthenticated" routerLink="/admin" routerLinkActive="active">Admin</a>
+      <button *ngIf="isAuthenticated" class="btn-debug" (click)="debugUserInfo()">🐛 Debug</button>
       <button *ngIf="isAuthenticated" class="btn-logout" (click)="signOut()">
         Sair ({{ currentUser?.email }})
       </button>

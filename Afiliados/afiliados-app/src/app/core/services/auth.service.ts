@@ -56,19 +56,15 @@ export class AuthService {
       // O trigger já deve ter criado o registro, mas vamos aguardar um pouco
       await this.waitForUserProfile(authUser.id);
       
-      const { data: publicUser, error } = await this.supabaseService.supabase
+      // Buscar dados do usuário
+      const { data: publicUser, error: userError } = await this.supabaseService.supabase
         .from('users')
-        .select(`
-          *,
-          user_roles!inner(
-            roles!inner(name, permissions)
-          )
-        `)
+        .select('*')
         .eq('id', authUser.id)
         .single();
 
-      if (error) {
-        console.error('Erro ao buscar perfil público:', error);
+      if (userError) {
+        console.error('Erro ao buscar perfil público:', userError);
         // Fallback: usar dados do auth se não encontrar na tabela pública
         this._currentUser.next({
           id: authUser.id,
@@ -77,8 +73,16 @@ export class AuthService {
           roles: ['user']
         });
       } else {
+        // Buscar roles do usuário separadamente
+        const { data: userRoles, error: rolesError } = await this.supabaseService.supabase
+          .from('user_roles')
+          .select(`
+            roles!inner(name, permissions)
+          `)
+          .eq('user_id', authUser.id);
+
         // Extrair roles do usuário
-        const roles = publicUser.user_roles?.map((ur: any) => ur.roles.name) || ['user'];
+        const roles = userRoles?.map((ur: any) => ur.roles.name) || ['user'];
         
         this._currentUser.next({
           ...publicUser,
@@ -194,7 +198,28 @@ export class AuthService {
 
   isAdmin(): boolean {
     const user = this._currentUser.value;
-    return user?.roles.includes('admin');
+    console.log('🔍 Debug isAdmin - Current user:', user);
+    console.log('🔍 Debug isAdmin - User roles:', user?.roles);
+    
+    // Verificar se usuário tem qualquer role de admin
+    const adminRoles = ['admin', 'super admin', 'superadmin', 'super_admin'];
+    const hasAdminRole = user?.roles?.some((role: string) => {
+      const normalizedRole = role.toLowerCase().trim();
+      const normalizedAdminRoles = adminRoles.map(r => r.toLowerCase().trim());
+      return normalizedAdminRoles.includes(normalizedRole);
+    });
+    
+    console.log('🔍 Debug isAdmin - Has admin role:', hasAdminRole);
+    return hasAdminRole || false;
+  }
+
+  // Método para debug - remover depois
+  debugCurrentUser(): void {
+    console.log('🐛 Current User Debug:', {
+      user: this._currentUser.value,
+      isAuthenticated: this._isAuthenticated.value,
+      roles: this._currentUser.value?.roles
+    });
   }
 
   // Método para atualizar perfil do usuário
@@ -235,5 +260,4 @@ export class AuthService {
       return { success: false, error: error.message || 'Erro desconhecido' };
     }
   }
-} 
 } 

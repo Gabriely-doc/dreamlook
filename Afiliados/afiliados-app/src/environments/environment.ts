@@ -47,7 +47,7 @@ export const environment = {
   
   // Niches Configuration
   niches: {
-    current: 'cozinha', // 'beleza', 'cozinha', 'moda'
+    current: 'beleza', // 'beleza', 'cozinha', 'moda'
     available: ['beleza', 'cozinha', 'moda'],
     themes: {
       beleza: {

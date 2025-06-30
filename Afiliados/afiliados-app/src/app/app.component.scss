@@ -134,6 +134,26 @@
   transform: translateY(-1px);
 }
 
+.btn-debug {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.btn-debug:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
 // Main Content
 .main-content {
   min-height: calc(100vh - 80px);

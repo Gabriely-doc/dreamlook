@@ -163,4 +163,14 @@ export class AppComponent implements OnInit {
   async signOut(): Promise<void> {
     await this.authService.signOut();
   }
+
+  // Método temporário para debug
+  debugUserInfo(): void {
+    console.log('🐛 === DEBUG USER INFO ===');
+    console.log('isAuthenticated:', this.isAuthenticated);
+    console.log('currentUser:', this.currentUser);
+    console.log('isAdmin():', this.authService.isAdmin());
+    this.authService.debugCurrentUser();
+    console.log('🐛 === END DEBUG ===');
+  }
 }
