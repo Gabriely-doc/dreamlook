@@ -281,6 +281,9 @@ export class SupabaseService {
           image_url,
           affiliate_url,
           heat_score,
+          total_votes,
+          positive_votes,
+          negative_votes,
           niches!inner(slug),
           created_at
         `)
@@ -300,7 +303,11 @@ export class SupabaseService {
         price: product.current_price,
         image_url: product.image_url,
         affiliate_link: product.affiliate_url,
-        vote_score: product.heat_score || 0,
+        vote_score: (product.positive_votes || 0) - (product.negative_votes || 0), // Votos positivos - negativos
+        total_votes: product.total_votes || 0,
+        positive_votes: product.positive_votes || 0,
+        negative_votes: product.negative_votes || 0,
+        heat_score: product.heat_score || 0,
         niche: product.niches?.slug || 'unknown',
         created_at: product.created_at
       }));
@@ -325,6 +332,9 @@ export class SupabaseService {
           image_url,
           affiliate_url,
           heat_score,
+          total_votes,
+          positive_votes,
+          negative_votes,
           niches!inner(slug),
           created_at
         `)
@@ -345,7 +355,11 @@ export class SupabaseService {
         price: product.current_price,
         image_url: product.image_url,
         affiliate_link: product.affiliate_url,
-        vote_score: product.heat_score || 0,
+        vote_score: (product.positive_votes || 0) - (product.negative_votes || 0), // Votos positivos - negativos
+        total_votes: product.total_votes || 0,
+        positive_votes: product.positive_votes || 0,
+        negative_votes: product.negative_votes || 0,
+        heat_score: product.heat_score || 0,
         niche: product.niches?.slug || niche,
         created_at: product.created_at
       }));

@@ -11,5 +11,9 @@ export const adminRoutes: Routes = [
   {
     path: 'moderation',
     loadComponent: () => import('./product-moderation.component').then(m => m.ProductModerationComponent)
+  },
+  {
+    path: 'products/new',
+    loadComponent: () => import('./product-form.component').then(m => m.ProductFormComponent)
   }
 ]; 

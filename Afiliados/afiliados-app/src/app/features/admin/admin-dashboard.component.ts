@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
         <div class="admin-card">
           <h3>➕ Produtos</h3>
           <p>Adicionar novos produtos manualmente</p>
-          <button class="btn-primary" disabled>Em breve</button>
+          <a routerLink="/admin/products/new" class="btn-primary">Cadastrar</a>
         </div>
         
         <div class="admin-card">

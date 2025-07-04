@@ -560,7 +560,9 @@ export class FeedProdutosComponent implements OnInit {
         // Atualizar o produto na lista local
         const productIndex = this.products.findIndex(p => p.id === productId);
         if (productIndex !== -1) {
-          this.products[productIndex].vote_score = result.vote_counts.heat_score;
+          // Usar os contadores atualizados retornados pela função
+          const voteCounts = result.vote_counts;
+          this.products[productIndex].vote_score = (voteCounts.positive || 0) - (voteCounts.negative || 0);
           
           // Atualizar estado visual do voto
           if (result.action === 'removed') {
@@ -569,8 +571,9 @@ export class FeedProdutosComponent implements OnInit {
             this.products[productIndex].user_vote = isPositive;
           }
           
-          // Mostrar feedback visual (opcional)
+          // Mostrar feedback visual
           console.log(`Voto ${result.action}: ${result.message}`);
+          console.log(`Contadores atualizados: +${voteCounts.positive} / -${voteCounts.negative} = ${this.products[productIndex].vote_score}`);
         }
       } else {
         console.error('Erro ao votar:', result.message);
