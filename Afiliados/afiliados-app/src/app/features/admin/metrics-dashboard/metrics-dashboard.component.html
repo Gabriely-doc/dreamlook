@@ -1,0 +1,33 @@
+<div class="metrics-container">
+    <h2>Dashboard de Métricas</h2>
+    
+    <div *ngIf="loading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Carregando métricas...</p>
+    </div>
+  
+    <div *ngIf="error" class="error-message">
+      <p>Erro ao carregar métricas. Tente novamente.</p>
+    </div>
+    
+    <div *ngIf="!loading && !error" class="metrics-grid">
+      <div class="metric-card">
+        <h3>Usuários Ativos</h3>
+        <p class="metric-value">{{ metrics.totalUsers }}</p>
+      </div>
+      
+      <div class="metric-card">
+        <h3>Produtos Aprovados</h3>
+        <p class="metric-value">{{ metrics.totalProducts }}</p>
+      </div>
+      
+      <div class="metric-card large-card">
+        <h3>Top 5 Produtos Mais Votados</h3>
+        <ul>
+          <li *ngFor="let product of metrics.topProducts">
+            {{ product.title }} ({{ product.total_votes }} votos)
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div> 

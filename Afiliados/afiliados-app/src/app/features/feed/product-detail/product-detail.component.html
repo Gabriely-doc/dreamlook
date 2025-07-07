@@ -1,0 +1,23 @@
+<div *ngIf="loading" class="loading-spinner">Carregando...</div>
+<div *ngIf="error" class="error-message">Erro ao carregar o produto.</div>
+
+<div *ngIf="product && !loading" class="product-detail-layout">
+  <div class="product-column">
+    <div class="product-card-detail">
+      <img [src]="product.image_url" [alt]="product.title" class="product-image-detail">
+      <h2>{{ product.title }}</h2>
+      <p class="description-detail">{{ product.description }}</p>
+      <div class="price-detail">
+        <span class="current-price-detail">R$ {{ product.current_price | number:'1.2-2' }}</span>
+        <span class="original-price-detail" *ngIf="product.original_price > product.current_price">
+          R$ {{ product.original_price | number:'1.2-2' }}
+        </span>
+      </div>
+      <a [href]="product.affiliate_url" target="_blank" class="btn-buy-detail">Ver Oferta</a>
+    </div>
+  </div>
+
+  <div class="comments-column">
+    <app-product-comments [productId]="product.id"></app-product-comments>
+  </div>
+</div> 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../core/services/supabase.service';
 import { environment } from '../../../environments/environment';
 
@@ -18,7 +19,7 @@ interface Product {
 @Component({
   selector: 'app-feed-produtos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <div class="feed-container">
       <!-- Header do Nicho Atual -->
@@ -93,10 +94,8 @@ interface Product {
 
             <!-- Action Button -->
             <a 
-              [href]="product.affiliate_link" 
-              target="_blank"
-              class="btn-buy"
-              (click)="trackClick(product.id)">
+              [routerLink]="['/product', product.id]"
+              class="btn-buy">
               🛒 Ver Produto
             </a>
           </div>

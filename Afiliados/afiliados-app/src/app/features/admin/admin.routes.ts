@@ -15,5 +15,9 @@ export const adminRoutes: Routes = [
   {
     path: 'products/new',
     loadComponent: () => import('./product-form.component').then(m => m.ProductFormComponent)
+  },
+  {
+    path: 'metrics',
+    loadComponent: () => import('./metrics-dashboard/metrics-dashboard.component').then(m => m.MetricsDashboardComponent)
   }
 ]; 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { CanActivate, CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -9,7 +9,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private injector: Injector
   ) {}
 
   canActivate(
@@ -27,23 +27,25 @@ export class AdminGuard implements CanActivate, CanActivateChild {
   }
 
   private checkAdminAccess(): boolean {
+    const router = this.injector.get(Router);
+    
     try {
       // Verificar se usuário está autenticado
       if (!this.authService.isAuthenticated) {
-        this.router.navigate(['/auth']);
+        router.navigate(['/auth']);
         return false;
       }
 
       // Verificar se usuário é admin
       if (!this.authService.isAdmin()) {
-        this.router.navigate(['/']);
+        router.navigate(['/']);
         return false;
       }
 
       return true;
     } catch (error) {
       // Em caso de erro, redirecionar para login por segurança
-      this.router.navigate(['/auth']);
+      router.navigate(['/auth']);
       return false;
     }
   }

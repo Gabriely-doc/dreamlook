@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
         <div class="admin-card">
           <h3>📊 Estatísticas</h3>
           <p>Visualizar métricas do aplicativo</p>
-          <button class="btn-primary" disabled>Em breve</button>
+          <a routerLink="/admin/metrics" class="btn-primary">Acessar</a>
         </div>
         
         <div class="admin-card">

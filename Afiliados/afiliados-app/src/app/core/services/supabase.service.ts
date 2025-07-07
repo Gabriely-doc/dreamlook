@@ -384,4 +384,54 @@ export class SupabaseService {
       console.warn('⚠️ Erro ao limpar locks:', error);
     }
   }
+
+  async getDashboardMetrics(): Promise<any> {
+    try {
+      if (!this.isConfigured()) {
+        throw new Error('Supabase não configurado');
+      }
+
+      const [
+        { count: totalUsers },
+        { count: totalProducts },
+        { data: topProducts }
+      ] = await Promise.all([
+        this.supabase.from('users').select('*', { count: 'exact' }),
+        this.supabase.from('products').select('*', { count: 'exact' }).eq('status', 'approved'),
+        this.supabase.from('products').select('title, total_votes').order('total_votes', { ascending: false }).limit(5)
+      ]);
+
+      return { totalUsers, totalProducts, topProducts };
+    } catch (error) {
+      console.error('Erro ao buscar métricas do dashboard:', error);
+      throw error;
+    }
+  }
+
+  // Método para buscar um produto pelo ID
+  getProductById(productId: string): Observable<any> {
+    return from(
+      this.supabase
+        .from('products')
+        .select(`
+          *,
+          niches!inner(name, slug, theme_color, secondary_color),
+          comments (
+            *,
+            users (full_name, avatar_url)
+          )
+        `)
+        .eq('id', productId)
+        .single()
+    ).pipe(
+      map((response: any) => {
+        if (response.error) throw response.error;
+        return response.data || null;
+      }),
+      catchError(error => {
+        console.error('Erro ao buscar produto:', error);
+        return of(null);
+      })
+    );
+  } 
 } 

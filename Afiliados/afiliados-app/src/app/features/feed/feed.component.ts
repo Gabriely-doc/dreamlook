@@ -19,9 +19,7 @@ import { FeedProdutosComponent } from './feed-produtos.component';
       </header>
       
       <!-- Componente de Produtos com Infinite Scroll -->
-      <app-feed-produtos 
-        (upvote)="onUpvote($event)"
-        (downvote)="onDownvote($event)">
+      <app-feed-produtos>
       </app-feed-produtos>
     </div>
   `,
@@ -144,17 +142,6 @@ import { FeedProdutosComponent } from './feed-produtos.component';
     }
   `]
 })
-export class FeedComponent {
-  
-  onUpvote(productId: string): void {
-    console.log('Upvote product:', productId);
-    // Implementar lógica de upvote futuramente
-    // Chamar serviço de votação quando disponível
-  }
+export class FeedComponent {  
 
-  onDownvote(productId: string): void {
-    console.log('Downvote product:', productId);
-    // Implementar lógica de downvote futuramente
-    // Chamar serviço de votação quando disponível
-  }
 } 
